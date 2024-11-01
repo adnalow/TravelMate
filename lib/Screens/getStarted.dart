@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:travel_mate/Widgets/button.dart';
+import 'package:travel_mate/Widgets/custom_Button.dart';
 import 'package:travel_mate/Screens/login.dart';
 
 class GetStarted extends StatelessWidget {

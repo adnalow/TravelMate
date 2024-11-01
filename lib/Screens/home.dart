@@ -1,28 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:travel_mate/Widgets/button.dart';
+import 'package:travel_mate/Widgets/custom_Button.dart';
+import 'package:travel_mate/Widgets/logo_AppBar.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  final Function(int) onSelectIndex;
+  const HomeScreen({super.key, required this.onSelectIndex});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5), 
-      appBar: AppBar(
-        backgroundColor: Colors.transparent, 
-        toolbarHeight: 50, 
-        title: const Text(
-          'TravelMate',
-          style: TextStyle(
-            color: Color(0xFF57CC99),
-            fontSize: 26, // Set the text color to the color from the image
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        centerTitle: true, // Centers the title
-      ),
+      appBar: const LogoAppBar(),
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(10, 10, 10, 20),
+        padding: const EdgeInsets.fromLTRB(10, 10, 10, 30),
         child: Center(
           child: Container(
             width: double.infinity,
@@ -31,11 +21,11 @@ class HomeScreen extends StatelessWidget {
               color: Colors.white,
               borderRadius: BorderRadius.circular(5),
               boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    spreadRadius: 1,
-                    blurRadius: 1,
-                  ),
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  spreadRadius: 1,
+                  blurRadius: 1,
+                ),
               ],
             ),
             child: Padding(
@@ -63,7 +53,7 @@ class HomeScreen extends StatelessWidget {
                     image: AssetImage('assets/images/illustration1.png'),
                     width: double.infinity,
                   ),
-                  const SizedBox(height: 40),
+                  const SizedBox(height: 30),
 
                   SizedBox( 
                     width: 280,
@@ -71,10 +61,7 @@ class HomeScreen extends StatelessWidget {
                     child: reusableElevatedButton(
                       text: "Let's Go!", 
                       onPressed: () {
-                        //Navigator.push(
-                          //context,
-                          //MaterialPageRoute(builder: (context) => const LoginScreen()),
-                        //);
+                        onSelectIndex(0); // Set to 0 for ItineraryScreen
                       },
                     ),
                   ),
