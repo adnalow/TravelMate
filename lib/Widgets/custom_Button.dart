@@ -22,3 +22,28 @@ ElevatedButton reusableElevatedButton({
     ),
   );
 }
+
+ElevatedButton customElevatedButton({
+  required String text,
+  required VoidCallback onPressed,
+  required Color backgroundColor,
+}) {
+  return ElevatedButton(
+    style: ElevatedButton.styleFrom(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      backgroundColor: backgroundColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5),
+      ),
+    ),
+    onPressed: onPressed,
+    child: Text(
+      text,
+      style: const TextStyle(
+        fontSize: 16,
+        color: Colors.white,
+        fontWeight: FontWeight.w500,
+      ),
+    ),
+  );
+}

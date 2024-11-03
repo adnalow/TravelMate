@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:travel_mate/Widgets/customTextField.dart';
 import 'package:travel_mate/Widgets/custom_AppBar.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:travel_mate/Widgets/custom_Button.dart';
 
 
 class ExpenseTrackerScreen extends StatefulWidget {
@@ -111,212 +114,254 @@ class _ExpenseTrackerScreenState extends State<ExpenseTrackerScreen> {
   );
 }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Expense Tracker"),
-        backgroundColor: const Color(0xff57CC99),
-        centerTitle: true,
-      ),
-      body: Center(
-        child: Column(
-          children: [
-            const SizedBox(height: 40),
-            Container(
-              width: 340,
-              height: 90,
-              decoration: BoxDecoration(
-                color: const Color(0xff57CC99),
-                borderRadius: BorderRadius.circular(10.0),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.25),
-                    blurRadius: 4,
+      appBar: const CustomAppBar(title: 'Expense Tracker'),
+      body: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Center(
+          child: Column(
+            children: [
+              const SizedBox(height: 10),
+              Container(
+                decoration: BoxDecoration(
+                  color: const Color(0xff57CC99),
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(5), 
+                    topRight: Radius.circular(5),
                   ),
-                ],
-              ),
-              padding: const EdgeInsets.all(15),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Column(
-                    children: [
-                      const Text(
-                        "Total Balance",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                        ),
-                      ),
-                      Text(
-                        tbalance.toString(),
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 25,
-                        ),
-                      ),
-                    ],
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      _showAdjustDialog(context);
-                    },
-                    child: const Text("Adjust"),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              width: 340,
-              height: 220,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10.0),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.25),
-                    blurRadius: 4,
-                  ),
-                ],
-              ),
-              padding: const EdgeInsets.all(15),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  TextField(
-                    controller: titleController,
-                    decoration: const InputDecoration(
-                      labelText: "Title",
-                      border: OutlineInputBorder(),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      spreadRadius: 1,
+                      blurRadius: 1,
                     ),
-                  ),
-                  const SizedBox(height: 10),
-                  TextField(
-                    controller: amountController,
-                    decoration: const InputDecoration(
-                      labelText: "Amount",
-                      border: OutlineInputBorder(),
-                    ),
-                    keyboardType: TextInputType.number,
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          if (amountController.text.isNotEmpty && titleController.text.isNotEmpty) {
-                            setState(() {
-                              int? amount = int.tryParse(amountController.text);
-                              if (amount != null) {
-                                tbalance += amount;
-                                history.insert(0, {
-                                  "title": titleController.text,
-                                  "amount": amount,
-                                  "timestamp": DateFormat('yyyy-MM-dd – kk:mm').format(DateTime.now()),
-                                });
-                                _saveData(); // Save data after adding
-                              }
-                              titleController.clear();
-                              amountController.clear();
-                            });
-                          }
-                        },
-                        child: const Text("Add"),
-                      ),
-                      const SizedBox(width: 10),
-                      ElevatedButton(
-                        onPressed: () {
-                          if (amountController.text.isNotEmpty && titleController.text.isNotEmpty) {
-                            setState(() {
-                              int? amount = int.tryParse(amountController.text);
-                              if (amount != null) {
-                                tbalance -= amount;
-                                history.insert(0, {
-                                  "title": titleController.text,
-                                  "amount": -amount,
-                                  "timestamp": DateFormat('yyyy-MM-dd – kk:mm').format(DateTime.now()),
-                                });
-                                _saveData(); // Save data after deduction
-                              }
-                              titleController.clear();
-                              amountController.clear();
-                            });
-                          }
-                        },
-                        child: const Text("Deduct"),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 10),
-            Container(
-              width: 340,
-              height: 180,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10.0),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.25),
-                    blurRadius: 4,
-                  ),
-                ],
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Column(
+                  ],
+                ),
+                padding: const EdgeInsets.all(10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    const Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("History"),
+                        const SizedBox(height: 10),
+                        const Text(
+                          "Total Balance",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                          ),
+                        ),
+                        Text(
+                          tbalance.toString(),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 32,
+                          ),
+                        ),
                       ],
                     ),
-                    const SizedBox(height: 10),
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: history.length,
-                        itemBuilder: (context, index) {
-                          int amount = history[index]["amount"];
-                          String formattedAmount = amount >= 0 ? "+$amount" : amount.toString();
-                          return Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(history[index]["title"] ?? "No Title"),
-                                  Text(
-                                    history[index]["timestamp"] ?? "",
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Text(
-                                formattedAmount,
-                                style: TextStyle(
-                                  color: amount >= 0 ? Colors.green : Colors.red,
-                                ),
-                              ),
-                            ],
-                          );
+                    SizedBox(
+                      height: 25,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(horizontal: 14),
+                          elevation: 0
+                        ),
+                        onPressed: () {
+                          _showAdjustDialog(context);
                         },
+                        child: const Text(
+                          "Adjust",
+                          style: TextStyle(
+                            color:  Color(0xff57CC99),
+                          ),
+                        ),
                       ),
                     ),
                   ],
                 ),
               ),
-            ),
-          ],
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(5), 
+                    bottomRight: Radius.circular(5),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 1,
+                      spreadRadius: 1,
+                    ),
+                  ],
+                ),
+                padding: const EdgeInsets.all(15),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    CustomTextField(
+                      labelText: 'Title',
+                      controller: titleController,
+                      keyboardType: TextInputType.text,
+                    ),
+                    const SizedBox(height: 15),
+                    CustomTextField(
+                      labelText: 'Amount',
+                      controller: amountController,
+                      keyboardType: TextInputType.number,
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: 35,
+                          width: 80,
+                          child: customElevatedButton(
+                            onPressed: () {
+                              if (amountController.text.isNotEmpty && titleController.text.isNotEmpty) {
+                                setState(() {
+                                  int? amount = int.tryParse(amountController.text);
+                                  if (amount != null) {
+                                    tbalance += amount;
+                                    history.insert(0, {
+                                      "title": titleController.text,
+                                      "amount": amount,
+                                      "timestamp": DateFormat('yyyy-MM-dd – kk:mm').format(DateTime.now()),
+                                    });
+                                    _saveData(); // Save data after adding
+                                  }
+                                  titleController.clear();
+                                  amountController.clear();
+                                });
+                              }
+                            },
+                            text: 'Add',
+                            backgroundColor: const Color(0xFF57CC99),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        SizedBox(
+                          height: 35,
+                          width: 80,
+                          child: customElevatedButton(
+                            onPressed: () {
+                              if (amountController.text.isNotEmpty && titleController.text.isNotEmpty) {
+                                setState(() {
+                                  int? amount = int.tryParse(amountController.text);
+                                  if (amount != null) {
+                                    tbalance -= amount;
+                                    history.insert(0, {
+                                      "title": titleController.text,
+                                      "amount": -amount,
+                                      "timestamp": DateFormat('yyyy-MM-dd – kk:mm').format(DateTime.now()),
+                                    });
+                                    _saveData(); // Save data after deduction
+                                  }
+                                  titleController.clear();
+                                  amountController.clear();
+                                });
+                              }
+                            },
+                            text: 'Deduct',
+                            backgroundColor: const Color(0xFFF65A5A),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 10),
+        
+              // History container
+              Expanded(
+                child: Container(
+                  height: 250,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(5.0),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 1,
+                        spreadRadius: 1,
+                      ),
+                    ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Column(
+                      children: [
+                        const Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "History",
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            Icon(Icons.menu),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        Expanded(
+                          child: ListView.builder(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            itemCount: history.length,
+                            itemBuilder: (context, index) {
+                              int amount = history[index]["amount"];
+                              String formattedAmount = amount >= 0 ? "+$amount" : amount.toString();
+                              return Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        history[index]["title"] ?? "No Title",
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                      Text(
+                                        history[index]["timestamp"] ?? "",
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Text(
+                                    formattedAmount,
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: amount >= 0 ? Colors.green : Colors.red,
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
