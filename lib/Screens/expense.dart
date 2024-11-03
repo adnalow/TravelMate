@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:travel_mate/Widgets/customTextField.dart';
 import 'package:travel_mate/Widgets/custom_AppBar.dart';
 import 'package:intl/intl.dart';
@@ -153,6 +152,7 @@ class _ExpenseTrackerScreenState extends State<ExpenseTrackerScreen> {
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 14,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                         Text(
@@ -179,6 +179,7 @@ class _ExpenseTrackerScreenState extends State<ExpenseTrackerScreen> {
                           "Adjust",
                           style: TextStyle(
                             color:  Color(0xff57CC99),
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
@@ -296,7 +297,7 @@ class _ExpenseTrackerScreenState extends State<ExpenseTrackerScreen> {
                     ],
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
                     child: Column(
                       children: [
                         const Row(
@@ -315,7 +316,7 @@ class _ExpenseTrackerScreenState extends State<ExpenseTrackerScreen> {
                         const SizedBox(height: 10),
                         Expanded(
                           child: ListView.builder(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            padding: const EdgeInsets.symmetric(horizontal: 5),
                             itemCount: history.length,
                             itemBuilder: (context, index) {
                               int amount = history[index]["amount"];

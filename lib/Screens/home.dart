@@ -45,10 +45,12 @@ class HomeScreen extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: 20),
-                      Image(
-                        image: AssetImage('assets/images/illustration1.png'),
-                        width: double.infinity,
-                        fit: BoxFit.cover,
+                      Center(
+                        child: Image(
+                          image: AssetImage('assets/images/illustration1.png'),
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ],
                   ),
