@@ -8,8 +8,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Color(0xFF57CC99), // Make background transparent
-      toolbarHeight: 50, // Set the height of the app bar
+      backgroundColor: const Color(0xFF57CC99), // Make background transparent
+      toolbarHeight: 50,
+      automaticallyImplyLeading: false,  // Set the height of the app bar
       title: Text(
         title,
         style: const TextStyle(

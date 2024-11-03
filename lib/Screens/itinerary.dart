@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:csc_picker/csc_picker.dart';
-import 'package:travel_mate/Screens/displayChoice.dart';
 import 'package:travel_mate/Widgets/custom_AppBar.dart';
 import 'package:travel_mate/Widgets/custom_Button.dart';
 
@@ -159,16 +158,9 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                             "Give me one place in $country, province of $province, municipality of $municipality that is fitted in this description: $preference. Use this format in giving my request: Name: {name of the place} Description: {2 sentences description of the place}.";
                       }
                       // Navigate to the DisplayChoice screen with the promptFormat
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DisplayChoice(
-                            promptFormat: promptFormat,
-                            onSelectIndex: (index) {
-                              Navigator.pop(context); // Go back to MainScreen
-                            },
-                          ),
-                        ),
+                      Navigator.of(context).pushNamed(
+                        'DisplayChoice',
+                        arguments: promptFormat,
                       );
                     }
                   ),

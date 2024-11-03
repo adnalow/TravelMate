@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
+import 'package:travel_mate/Widgets/custom_AppBar.dart';
 import 'package:travel_mate/Widgets/custom_Button.dart';
-import 'package:travel_mate/Widgets/logo_AppBar.dart';
 
 class DisplayChoice extends StatefulWidget {
   final String promptFormat; // Declare the promptFormat variable
@@ -89,92 +89,94 @@ class DisplayChoiceState extends State<DisplayChoice> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
-      appBar: const LogoAppBar(),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: [
-            const Image(
-                    image: AssetImage('assets/images/illustration2cropped.png'),
-                    width: double.infinity,
-            ),
-
-            // Container for Place Name and Description or loading indicator
-            Container(
-              padding: const EdgeInsets.all(20.0),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(5.0),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    spreadRadius: 1,
-                    blurRadius: 1,
+      appBar: const CustomAppBar(title: 'Itinerary Builder'),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            children: [
+              const Image(
+                      image: AssetImage('assets/images/illustration2cropped.png'),
+                      width: double.infinity,
+              ),
+        
+              // Container for Place Name and Description or loading indicator
+              Container(
+                padding: const EdgeInsets.all(20.0),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(5.0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      spreadRadius: 1,
+                      blurRadius: 1,
+                    ),
+                  ],
+                ),
+                child: loading
+                    ? const Center(child: CircularProgressIndicator(color: Color(0xFF57CC99),)) // Show loading indicator
+                    : Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "$placeName",
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 3.0), // Space between name and line
+                          const Divider(color: Colors.grey), // Line separator
+                          const SizedBox(height: 3.0), // Space between line and description
+                          Text(
+                            "$description",
+                            textAlign: TextAlign.justify,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+              ),
+              const SizedBox(height: 10),
+              // Row for Back and Next Destination buttons
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context); // Go back to the previous screen
+                    },
+                    child: const Text(
+                      'Back',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w100,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  
+                  reusableElevatedButton(
+                    text: 'Next Destination', 
+                    onPressed: () {
+                      setState(() {
+                        loading = true; // Set loading to true for next destination request
+                      });
+                      newPrompt = "Aside from $placeName, suggest a new destination that is within the same area or province. Use this format in giving my request: Name: {name of the place} Description: {2 sentences description of the place}.";
+                      sendRequest(newPrompt);
+                    }
                   ),
                 ],
               ),
-              child: loading
-                  ? const Center(child: CircularProgressIndicator(color: Color(0xFF57CC99),)) // Show loading indicator
-                  : Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "$placeName",
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 3.0), // Space between name and line
-                        const Divider(color: Colors.grey), // Line separator
-                        const SizedBox(height: 3.0), // Space between line and description
-                        Text(
-                          "$description",
-                          textAlign: TextAlign.justify,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-            ),
-            const SizedBox(height: 10),
-            // Row for Back and Next Destination buttons
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context); // Go back to the previous screen
-                  },
-                  child: const Text(
-                    'Back',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w100,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                
-                reusableElevatedButton(
-                  text: 'Next Destination', 
-                  onPressed: () {
-                    setState(() {
-                      loading = true; // Set loading to true for next destination request
-                    });
-                    newPrompt = "Aside from $placeName, suggest a new destination that is within the same area or province. Use this format in giving my request: Name: {name of the place} Description: {2 sentences description of the place}.";
-                    sendRequest(newPrompt);
-                  }
-                ),
-              ],
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

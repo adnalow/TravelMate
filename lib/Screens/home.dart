@@ -52,6 +52,7 @@ class HomeScreen extends StatelessWidget {
                   const Image(
                     image: AssetImage('assets/images/illustration1.png'),
                     width: double.infinity,
+                    fit: BoxFit.cover, 
                   ),
                   const SizedBox(height: 30),
 
