@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "73741512932",
+    "project_id": "travelmate-b595e",
+    "storage_bucket": "travelmate-b595e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:73741512932:android:8a007368498c54e88f3cf1",
+        "android_client_info": {
+          "package_name": "com.example.discover"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCibU7LyKLDTbKhh_RJ64MvQY36L2fhb-Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:73741512932:android:0a2e8258bf91a9e58f3cf1",
+        "android_client_info": {
+          "package_name": "com.example.travel_mate"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCibU7LyKLDTbKhh_RJ64MvQY36L2fhb-Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
