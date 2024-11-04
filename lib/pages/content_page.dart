@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:travel_mate/models/groups_model.dart';
 
 class ContentPage extends StatefulWidget {
-  final GroupModel group; 
+  final GroupModel group;
 
   const ContentPage({super.key, required this.group});
 
@@ -19,26 +20,62 @@ class _ContentPageState extends State<ContentPage> {
   @override
   void initState() {
     super.initState();
-    _dateController.text = widget.group.date;
-    _locationController.text = widget.group.location;
-    _thingsToBringController.text = widget.group.thingsToBring;
+    _dateController.text = widget.group.date ?? ''; 
+    _locationController.text = widget.group.location ?? ''; 
+    _thingsToBringController.text = widget.group.thingsToBring ?? ''; 
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBar(),
-      body: Column(
-        children: [
-          outingHeader(),
-          locationField(),
-          thingsToBringField(),
-          datePicker(),
-          saveButton(),  
+  return Scaffold(
+    appBar: AppBar(
+      title: Text('Your Title'),
+      actions: [
+        IconButton(
+          icon: Icon(Icons.menu),
+          onPressed: () {
+            Scaffold.of(context).openDrawer();
+          },
+        ),
+      ],
+    ),
+    drawer: Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: <Widget>[
+          DrawerHeader(
+            child: Text('Drawer Header'),
+            decoration: BoxDecoration(
+              color: Colors.blue,
+            ),
+          ),
+          ListTile(
+            title: Text('Item 1'),
+            onTap: () {
+              // Handle item tap
+            },
+          ),
+          ListTile(
+            title: Text('Item 2'),
+            onTap: () {
+              // Handle item tap
+            },
+          ),
         ],
       ),
-    );
-  }
+    ),
+    body: Column(
+      children: [
+        outingHeader(),
+        locationField(),
+        thingsToBringField(),
+        datePicker(),
+        saveButton(),
+      ],
+    ),
+  );
+}
+
 
   Padding datePicker() {
     return Padding(
@@ -57,9 +94,7 @@ class _ContentPageState extends State<ContentPage> {
           ),
         ),
         readOnly: true,
-        onTap: () {
-          _selectDate();
-        },
+        onTap: _selectDate,
       ),
     );
   }
@@ -94,7 +129,7 @@ class _ContentPageState extends State<ContentPage> {
       child: SizedBox(
         height: 170,
         child: TextField(
-          controller: _thingsToBringController,  // Add controller
+          controller: _thingsToBringController,
           expands: true,
           maxLines: null,
           decoration: InputDecoration(
@@ -129,7 +164,7 @@ class _ContentPageState extends State<ContentPage> {
         ],
       ),
       child: TextField(
-        controller: _locationController,  // Add controller
+        controller: _locationController,
         decoration: InputDecoration(
           filled: true,
           fillColor: Colors.white,
@@ -163,14 +198,14 @@ class _ContentPageState extends State<ContentPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              widget.group.title, 
+              widget.group.title,
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 16,
               ),
             ),
             Text(
-              widget.group.label, 
+              widget.group.label,
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 12,
@@ -186,7 +221,7 @@ class _ContentPageState extends State<ContentPage> {
     return AppBar(
       leading: GestureDetector(
         onTap: () {
-          Navigator.of(context).pop(); 
+          Navigator.of(context).pop();
         },
         child: Container(
           margin: const EdgeInsets.all(10),
@@ -203,8 +238,6 @@ class _ContentPageState extends State<ContentPage> {
     );
   }
 
-
-
   Widget saveButton() {
     return Padding(
       padding: const EdgeInsets.all(20),
@@ -218,6 +251,7 @@ class _ContentPageState extends State<ContentPage> {
           String date = _dateController.text;
 
           widget.group.updateDetails(location, thingsToBring, date);
+          _updateGroupInFirestore(widget.group);
 
           Navigator.of(context).pop();
         },
@@ -229,5 +263,16 @@ class _ContentPageState extends State<ContentPage> {
         ),
       ),
     );
+  }
+
+  Future<void> _updateGroupInFirestore(GroupModel group) async {
+
+    String groupId = group.id; 
+
+    await FirebaseFirestore.instance.collection('groups').doc(groupId).update({
+      'location': group.location,
+      'thingsToBring': group.thingsToBring,
+      'date': group.date,
+    });
   }
 }

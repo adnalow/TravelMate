@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:travel_mate/pages/forgot_page.dart';
-import 'package:travel_mate/pages/signUp_page.dart';
+import 'package:travel_mate/pages/signup_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -39,7 +39,8 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     if (passwordController.text.length < 6) {
-      Get.snackbar("Input Error", "Password must be at least 6 characters long.",
+      Get.snackbar(
+          "Input Error", "Password must be at least 6 characters long.",
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.orangeAccent,
           colorText: Colors.white,
@@ -71,9 +72,11 @@ class _LoginPageState extends State<LoginPage> {
           backgroundColor: Colors.redAccent,
           colorText: Colors.white);
     } finally {
-      setState(() {
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
   }
 
