@@ -29,22 +29,28 @@ class HomeScreen extends StatelessWidget {
             ),
             child: Stack(
               children: [
+                const Positioned(
+                  top: 30,
+                  left: 10,
+                  right: 10,
+                  child: Text(
+                    'Ready to find your\nnext destination?',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 30,
+                      color: Color(0xFF2E2E2E),
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+
                 const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 30),
+                  padding: EdgeInsets.symmetric(horizontal: 15),
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      // Title
-                      Text(
-                        'Ready to find your\nnext destination?',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 30,
-                          color: Color(0xFF2E2E2E),
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      SizedBox(height: 20),
+                      SizedBox(height: 10),
                       Image(
                         image: AssetImage('assets/images/illustration1.png'),
                         width: double.infinity,
@@ -53,6 +59,7 @@ class HomeScreen extends StatelessWidget {
                     ],
                   ),
                 ),
+
                 Positioned(
                   bottom: 30,
                   left: 50,

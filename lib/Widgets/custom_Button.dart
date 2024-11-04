@@ -17,7 +17,7 @@ ElevatedButton reusableElevatedButton({
       style: const TextStyle(
         fontSize: 18,
         color: Colors.white,
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w600,
       ),
     ),
   );
@@ -42,7 +42,7 @@ ElevatedButton customElevatedButton({
       style: const TextStyle(
         fontSize: 16,
         color: Colors.white,
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w600,
       ),
     ),
   );

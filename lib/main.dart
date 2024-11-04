@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:travel_mate/main_screen.dart';
 import 'package:travel_mate/firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -28,9 +27,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        textTheme: GoogleFonts.mulishTextTheme(
-          Theme.of(context).textTheme
-        )
+        fontFamily: 'Mulish',
       ),
       home: const MainScreen(),
     );

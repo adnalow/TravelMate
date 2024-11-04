@@ -137,7 +137,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                                       'Reviews ($reviewCount)',
                                       style: const TextStyle(
                                         fontSize: 14,
-                                        fontWeight: FontWeight.w400,
+                                        fontWeight: FontWeight.w500,
                                       ),
                                     ),
                                   ],

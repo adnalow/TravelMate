@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:travel_mate/Widgets/customTextField.dart';
 import 'package:travel_mate/Widgets/custom_AppBar.dart';
 import 'package:intl/intl.dart';
@@ -64,49 +63,81 @@ class _ExpenseTrackerScreenState extends State<ExpenseTrackerScreen> {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: const Text("Adjust Balance", textAlign: TextAlign.center,),
+        titlePadding: const EdgeInsets.all(10),
+        contentPadding: const EdgeInsets.all(15),
+        actionsPadding: const EdgeInsets.only(right: 15, bottom: 10),
+        title: const Text(
+          "Adjust Balance", 
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5.0),
+        ),
         content: Column(
           mainAxisSize: MainAxisSize.min, // Adjust dialog size
           children: [
-            TextField(
+            CustomTextField(
               controller: amountController, // Reuse your existing controller
               keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                labelText: "Balance",
-                border: OutlineInputBorder(),
-              ),
+              width: 300,
+              hintText: 'Enter amount',
             ),
           ],
         ),
         actions: <Widget>[
-          ElevatedButton(
-            onPressed: () async {
-              int? amount = int.tryParse(amountController.text);
-              if (amount != null) {
-                setState(() {
-                  tbalance = amount; // Set the new balance based on user input
-                });
-
-                // Save the new balance to local storage
-                final prefs = await SharedPreferences.getInstance();
-                await prefs.setInt('tbalance', tbalance);
-
-                // Optionally, update the history and save it if needed
-                history.insert(0,{
-                  "title": "Balance Adjusted",
-                  "amount": amount,
-                  "timestamp": DateFormat('yyyy-MM-dd – kk:mm').format(DateTime.now()),
-                });
-                await prefs.setString('history', history.map((entry) {
-                  return "${entry['title']}|${entry['amount']}|${entry['timestamp']}";
-                }).join(';'));
-
-                // Clear the input field after saving
-                amountController.clear();
-              }
-              Navigator.of(context).pop(); // Close the dialog after adjusting
-            },
-            child: const Text("Adjust"),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                ),
+                onPressed: () {
+                  Navigator.pop(context); // Go back to the previous screen
+                },
+                child: const Text(
+                  'Back',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w100,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              reusableElevatedButton(
+                text: 'Update',
+                onPressed: () async {
+                  int? amount = int.tryParse(amountController.text);
+                  if (amount != null) {
+                    setState(() {
+                      tbalance = amount; // Set the new balance based on user input
+                    });
+              
+                    // Save the new balance to local storage
+                    final prefs = await SharedPreferences.getInstance();
+                    await prefs.setInt('tbalance', tbalance);
+              
+                    // Optionally, update the history and save it if needed
+                    history.insert(0,{
+                      "title": "Balance Adjusted",
+                      "amount": amount,
+                      "timestamp": DateFormat('yyyy-MM-dd – kk:mm').format(DateTime.now()),
+                    });
+                    await prefs.setString('history', history.map((entry) {
+                      return "${entry['title']}|${entry['amount']}|${entry['timestamp']}";
+                    }).join(';'));
+              
+                    // Clear the input field after saving
+                    amountController.clear();
+                  }
+                  Navigator.of(context).pop(); // Close the dialog after adjusting
+                },
+              ),
+            ],
           ),
         ],
       );
@@ -118,6 +149,7 @@ class _ExpenseTrackerScreenState extends State<ExpenseTrackerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(title: 'Expense Tracker'),
+      resizeToAvoidBottomInset: true,
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Center(
@@ -153,6 +185,7 @@ class _ExpenseTrackerScreenState extends State<ExpenseTrackerScreen> {
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 14,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                         Text(
@@ -179,6 +212,7 @@ class _ExpenseTrackerScreenState extends State<ExpenseTrackerScreen> {
                           "Adjust",
                           style: TextStyle(
                             color:  Color(0xff57CC99),
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
@@ -209,14 +243,16 @@ class _ExpenseTrackerScreenState extends State<ExpenseTrackerScreen> {
                       labelText: 'Title',
                       controller: titleController,
                       keyboardType: TextInputType.text,
+                      hintText: 'Enter title',
                     ),
-                    const SizedBox(height: 15),
+                    const SizedBox(height: 10),
                     CustomTextField(
                       labelText: 'Amount',
                       controller: amountController,
                       keyboardType: TextInputType.number,
+                      hintText: 'Enter amount',
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 15),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -279,11 +315,11 @@ class _ExpenseTrackerScreenState extends State<ExpenseTrackerScreen> {
                 ),
               ),
               const SizedBox(height: 10),
-        
+                  
               // History container
               Expanded(
                 child: Container(
-                  height: 250,
+                  height: 235,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(5.0),
@@ -296,7 +332,7 @@ class _ExpenseTrackerScreenState extends State<ExpenseTrackerScreen> {
                     ],
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
                     child: Column(
                       children: [
                         const Row(
@@ -315,7 +351,7 @@ class _ExpenseTrackerScreenState extends State<ExpenseTrackerScreen> {
                         const SizedBox(height: 10),
                         Expanded(
                           child: ListView.builder(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            padding: const EdgeInsets.symmetric(horizontal: 5),
                             itemCount: history.length,
                             itemBuilder: (context, index) {
                               int amount = history[index]["amount"];
