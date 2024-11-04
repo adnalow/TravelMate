@@ -31,6 +31,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5), 
       appBar: const CustomAppBar(title: 'Itinerary Builder'),
+      resizeToAvoidBottomInset: false, 
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(10),
