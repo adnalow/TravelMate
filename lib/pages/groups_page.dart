@@ -24,8 +24,11 @@ class _GroupsPageState extends State<GroupsPage> {
     _getGroups();
   }
 
-
-
+  void _removeGroup(String groupId) {
+    setState(() {
+      groups.removeWhere((group) => group.id == groupId);
+    });
+  }
 
   Future<void> _getGroups() async {
     User? user = FirebaseAuth.instance.currentUser; // Get the current user
@@ -109,6 +112,9 @@ class _GroupsPageState extends State<GroupsPage> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => ContentPage(
+                    onLeaveGroup: () {
+                      _removeGroup(groups[index].id);
+                    },
                     group: groups[index],
                   ),
                 ),

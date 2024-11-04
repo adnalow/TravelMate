@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -5,8 +6,9 @@ import 'package:travel_mate/models/groups_model.dart';
 
 class ContentPage extends StatefulWidget {
   final GroupModel group;
+  final VoidCallback onLeaveGroup; // Callback for when the user leaves the group
 
-  const ContentPage({super.key, required this.group});
+  const ContentPage({super.key, required this.group, required this.onLeaveGroup});
 
   @override
   State<ContentPage> createState() => _ContentPageState();
@@ -15,50 +17,63 @@ class ContentPage extends StatefulWidget {
 class _ContentPageState extends State<ContentPage> {
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
-  final TextEditingController _thingsToBringController = TextEditingController();
+  final TextEditingController _thingsToBringController =
+      TextEditingController();
+  List<String?> memberEmails = []; // List to store member emails
 
   @override
   void initState() {
     super.initState();
-    _dateController.text = widget.group.date ?? ''; 
-    _locationController.text = widget.group.location ?? ''; 
-    _thingsToBringController.text = widget.group.thingsToBring ?? ''; 
+    _dateController.text = widget.group.date ?? '';
+    _locationController.text = widget.group.location ?? '';
+    _thingsToBringController.text = widget.group.thingsToBring ?? '';
+    _fetchMemberEmails(); // Fetch member emails on initialization
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Future<void> _fetchMemberEmails() async {
+    memberEmails =
+        await Future.wait(widget.group.memberIds.map(getUserEmailById));
+    setState(() {}); // Refresh the UI
+  }
+
+  Future<String?> getUserEmailById(String userId) async {
+    // Fetch the user document by userId
+    final doc =
+        await FirebaseFirestore.instance.collection('users').doc(userId).get();
+    if (doc.exists) {
+      return doc.data()?['email']
+          as String?; 
+    } else {
+      return null; 
+    }
+  }
+
+@override
+Widget build(BuildContext context) {
   return Scaffold(
-    appBar: AppBar(
-      title: Text('Your Title'),
-      actions: [
-        IconButton(
-          icon: Icon(Icons.menu),
-          onPressed: () {
-            Scaffold.of(context).openDrawer();
-          },
-        ),
-      ],
-    ),
+    appBar: appBar(),
     drawer: Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
           DrawerHeader(
-            child: Text('Drawer Header'),
+            child: Text('Group Members'),
             decoration: BoxDecoration(
               color: Colors.blue,
             ),
           ),
+          ...memberEmails.map((email) {
+            return ListTile(
+              title: Text(email ?? 'Unknown Member'), // Handle null case
+              onTap: () {
+                // Handle item tap (optional)
+              },
+            );
+          }).toList(),
           ListTile(
-            title: Text('Item 1'),
+            title: const Text('Leave Group'), // Leave Group button
             onTap: () {
-              // Handle item tap
-            },
-          ),
-          ListTile(
-            title: Text('Item 2'),
-            onTap: () {
-              // Handle item tap
+              _leaveGroup();
             },
           ),
         ],
@@ -75,6 +90,25 @@ class _ContentPageState extends State<ContentPage> {
     ),
   );
 }
+
+Future<void> _leaveGroup() async {
+  User? user = FirebaseAuth.instance.currentUser;
+  String userId = user!.uid; // Replace this with the actual current user ID
+  String groupId = widget.group.id;
+
+  // Remove the user from the group's member IDs
+  await FirebaseFirestore.instance.collection('groups').doc(groupId).update({
+    'memberIds': FieldValue.arrayRemove([userId]),
+  });
+
+  // Call the callback to inform the parent to refresh its state
+  widget.onLeaveGroup();
+
+  // Optionally, navigate back after leaving the group
+  Navigator.of(context).pop(); // Close the drawer
+  Navigator.of(context).pop(); // Go back to the previous screen
+}
+
 
 
   Padding datePicker() {
@@ -193,7 +227,8 @@ class _ContentPageState extends State<ContentPage> {
         borderRadius: BorderRadius.circular(10),
       ),
       child: Container(
-        padding: const EdgeInsets.only(top: 45, bottom: 15, right: 15, left: 15),
+        padding:
+            const EdgeInsets.only(top: 45, bottom: 15, right: 15, left: 15),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -217,26 +252,30 @@ class _ContentPageState extends State<ContentPage> {
     );
   }
 
-  AppBar appBar() {
-    return AppBar(
-      leading: GestureDetector(
-        onTap: () {
-          Navigator.of(context).pop();
+ AppBar appBar() {
+  return AppBar(
+    leading: IconButton(
+      icon: const Icon(Icons.arrow_back), 
+      onPressed: () {
+        Navigator.of(context).pop(); 
+      },
+    ),
+    actions: [
+      Builder(
+        builder: (BuildContext context) {
+          return IconButton(
+            icon: SvgPicture.asset('assets/icons/menu.svg'),
+            onPressed: () {
+              Scaffold.of(context).openDrawer();
+            },
+          );
         },
-        child: Container(
-          margin: const EdgeInsets.all(10),
-          alignment: Alignment.center,
-          height: 20,
-          width: 20,
-          decoration: BoxDecoration(
-            color: const Color(0xffF7F8F8),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: SvgPicture.asset('assets/icons/menu.svg'),
-        ),
       ),
-    );
-  }
+    ],
+  );
+}
+
+
 
   Widget saveButton() {
     return Padding(
@@ -266,8 +305,7 @@ class _ContentPageState extends State<ContentPage> {
   }
 
   Future<void> _updateGroupInFirestore(GroupModel group) async {
-
-    String groupId = group.id; 
+    String groupId = group.id;
 
     await FirebaseFirestore.instance.collection('groups').doc(groupId).update({
       'location': group.location,
