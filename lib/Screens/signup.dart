@@ -1,7 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:travel_mate/Screens/login.dart';
+import 'package:travel_mate/Widgets/backAppBar.dart';
+import 'package:travel_mate/Widgets/customTextField.dart';
+import 'package:travel_mate/Widgets/custom_Button.dart';
 import 'package:travel_mate/wrapper.dart';
 
 class SignupPage extends StatefulWidget {
@@ -88,27 +93,110 @@ class _SignupPageState extends State<SignupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Sign Up")),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: emailController,
-              decoration: InputDecoration(hintText: 'Enter email'),
+      resizeToAvoidBottomInset: false, // Prevents resizing when the keyboard appears
+      body: Stack(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/images/background.png'),
+                fit: BoxFit.cover,
+              ),
             ),
-            TextField(
-              controller: passwordController,
-              decoration: InputDecoration(hintText: 'Enter password'),
-              obscureText: true,
+          ),
+
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Container(
+                padding: const EdgeInsets.all(20.0),
+                decoration: BoxDecoration(
+                  color: Color(0xFFFFFFFF),
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text(
+                      'Sign up now',
+                      style: TextStyle(
+                        fontSize: 26,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const Text(
+                      'Please fill the details and create account',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Color(0xFF808080),
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    CustomTextField(
+                      controller: emailController,
+                      labelText: 'Email',
+                      hintText: 'Enter email',
+                      width: double.infinity,
+                    ),
+                    const SizedBox(height: 20),
+                    CustomTextField(
+                      controller: passwordController,
+                      labelText: 'Password',
+                      hintText: 'Enter password',
+                      width: double.infinity,
+                      obscureText: true, // Hide the password input
+                    ),
+                    const SizedBox(height: 25),
+                    SizedBox(
+                      width: 300,
+                      height: 45,
+                      child: loginElevatedButton(
+                        onPressed: isLoading ? null : signup,
+                        child: isLoading
+                            ? const CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                              )
+                            : const Text(
+                                'Sign Up',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    RichText(
+                      text: TextSpan(
+                        text: "Already have an account? ",
+                        style: const TextStyle(
+                          fontSize: 15,
+                          color: Colors.black,
+                          fontFamily: 'Mulish',
+                        ),
+                        children: [
+                          TextSpan(
+                            text: 'Sign In',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF48B89F),
+                            ),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                Get.to(LoginScreen());
+                              }
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: isLoading ? null : signup,
-              child: isLoading ? CircularProgressIndicator() : Text('Sign Up'),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
