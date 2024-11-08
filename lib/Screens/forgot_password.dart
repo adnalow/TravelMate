@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:travel_mate/Widgets/customTextField.dart';
+import 'package:travel_mate/Widgets/custom_Button.dart';
 
 class ForgotPage extends StatefulWidget {
   const ForgotPage({super.key});
@@ -55,21 +57,81 @@ class _ForgotPageState extends State<ForgotPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Forgot Password")),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: email,
-              decoration: InputDecoration(hintText: 'Enter email'),
+      body: Stack(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/images/background.png'),
+                fit: BoxFit.cover,
+              ),
             ),
-            ElevatedButton(
-              onPressed: reset,
-              child: Text('Reset Password'),
+          ),
+
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Container(
+                padding: const EdgeInsets.all(20.0),
+                decoration: BoxDecoration(
+                  color: Color(0xFFFFFFFF),
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text(
+                      'Forgot Password',
+                      style: TextStyle(
+                        fontSize: 26,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const Text(
+                      'Enter your email to receive a password reset link',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Color(0xFF808080),
+                        fontWeight: FontWeight.normal,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 20),
+                    CustomTextField(
+                      controller: email,
+                      labelText: 'Email',
+                      hintText: 'Enter email',
+                      width: double.infinity,
+                    ),
+                    const SizedBox(height: 25),
+                    SizedBox(
+                      width: 300,
+                      height: 45,
+                      child: reusableElevatedButton(
+                        onPressed: reset,
+                        text: 'Reset Password',
+                      ),
+                    ),
+                    const SizedBox(height: 15),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text(
+                        'Back to Login',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xFF48B89F),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-          ],
-        ),
+          ),
+        ]
       ),
     );
   }

@@ -107,8 +107,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   color: Color(0xFFFFFFFF),
                   borderRadius: BorderRadius.circular(5),
                 ),
-                height: 370,
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     const Text(
                       'Sign in now',
@@ -130,10 +130,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       controller: emailController,
                       hintText: 'Enter email',
                       width: double.infinity,
+                      labelText: 'Email',
                     ),
                     const SizedBox(height: 20),
                     CustomTextField(
                       controller: passwordController,
+                      labelText: 'Password',
                       hintText: 'Enter password',
                       width: double.infinity,
                       obscureText: true, // Hide the password input
@@ -172,6 +174,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             text: 'Sign Up',
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
+                              color: Color(0xFF48B89F),
                             ),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
@@ -190,7 +193,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         'Forgot Password?',
                         style: TextStyle(
                           fontSize: 15,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xFF48B89F),
                         ),
                       ),
                     ),

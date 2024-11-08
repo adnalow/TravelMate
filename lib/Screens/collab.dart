@@ -55,6 +55,7 @@ class _CollaborativeScreenState extends State<CollaborativeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFF5F5F5),
       appBar: appBar(),
       body: Stack(
         children: [
@@ -105,7 +106,8 @@ class _CollaborativeScreenState extends State<CollaborativeScreen> {
     child: groups.isEmpty
         ? Center(
             child: Text(
-              'No groups available. Start by adding a travel plan!',
+              'No groups available. Add a travel plan!',
+              textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
