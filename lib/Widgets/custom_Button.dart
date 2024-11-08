@@ -23,6 +23,28 @@ ElevatedButton reusableElevatedButton({
   );
 }
 
+ElevatedButton loginElevatedButton({
+  String? text, // Optional text
+  Widget? child, // Optional child widget
+  required VoidCallback? onPressed, // Make onPressed nullable
+}) {
+  return ElevatedButton(
+    style: ElevatedButton.styleFrom(
+      backgroundColor: const Color(0xFF57CC99),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(50),
+      ),
+    ),
+    onPressed: onPressed, // This can now accept null
+    child: child ?? // Use the child if provided, otherwise fallback to text
+        Text(
+          text ?? '',
+          
+        ),
+  );
+}
+
+
 ElevatedButton customElevatedButton({
   required String text,
   required VoidCallback onPressed,

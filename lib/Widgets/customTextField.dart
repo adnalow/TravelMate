@@ -6,6 +6,7 @@ class CustomTextField extends StatelessWidget {
   final String hintText; // Parameter for hint text
   final TextInputType? keyboardType; // Optional parameter for keyboard type
   final double? width; // Parameter for adjustable width
+  final bool obscureText; // Optional parameter for obscure text
 
   const CustomTextField({
     Key? key,
@@ -14,6 +15,7 @@ class CustomTextField extends StatelessWidget {
     required this.hintText, // Make hintText required
     this.keyboardType,
     this.width, // Add width parameter
+    this.obscureText = false, // Add obscureText parameter with default value
   }) : super(key: key);
 
   @override
@@ -37,6 +39,7 @@ class CustomTextField extends StatelessWidget {
           child: TextField(
             controller: controller,
             keyboardType: keyboardType, // Use the keyboardType parameter
+            obscureText: obscureText, // Use the obscureText parameter
             decoration: InputDecoration(
               hintText: hintText, // Use the hintText parameter
               hintStyle: const TextStyle(color: Colors.grey), // Set hint text color to grey
