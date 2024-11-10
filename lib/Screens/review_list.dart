@@ -34,24 +34,35 @@ class ReviewList extends StatelessWidget {
           final reviews = snapshot.data!.docs;
           
           if (reviews.isEmpty) {
-            return const Center(child: Text("No reviews yet."));
+            return const Center(
+              child: Padding(
+                padding: EdgeInsets.only(top: 5),
+                child: Text(
+                  "No reviews yet.",
+                  style: TextStyle(fontSize: 16, color: Color(0xFF808080)),
+                ),
+              ),
+            );
           }
-
-          // Build the list of reviews
-          return ListView.builder(
-            itemCount: reviews.length,
-            itemBuilder: (context, index) {
-              final reviewData = reviews[index];
-              final reviewText = reviewData['review'];
-              final reviewDate = (reviewData['date'] as Timestamp).toDate();
-              final formattedDate = DateFormat.yMMMd().format(reviewDate);
-
-              return ListTile(
-                title: Text(reviewText),
-                subtitle: Text(formattedDate),
-                leading: const Icon(Icons.comment, color: Colors.green),
-              );
-            },
+          
+          // Replace ListView.builder with a Column to avoid height issues
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              for (int index = 0; index < reviews.length; index++) ...[
+                Text(
+                  reviews[index]['review'],
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                ),
+                Text(
+                  DateFormat.yMMMd().format(
+                      (reviews[index]['date'] as Timestamp).toDate(),
+                  ),
+                  style: const TextStyle(color: Color(0xFF808080)),
+                ),
+                if (index < reviews.length - 1) const Divider(thickness: 0.5),
+              ],
+            ],
           );
         }
 
