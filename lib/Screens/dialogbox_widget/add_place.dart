@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:travel_mate/Widgets/customTextField.dart';
+import 'package:travel_mate/Widgets/custom_Button.dart';
 import 'package:travel_mate/discover_utils/utils.dart';
 import 'package:travel_mate/discover_utils/models/featured_place.dart';
 import 'package:travel_mate/discover_utils/services/db_service.dart';
@@ -15,7 +17,38 @@ Future<void> showUploadDialog(BuildContext context) async {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: const Text('Upload Details'),
+        titlePadding: const EdgeInsets.fromLTRB(10, 5, 5, 0),
+        contentPadding: const EdgeInsets.all(15),
+        actionsPadding: const EdgeInsets.only(right: 15, bottom: 10),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5.0),
+        ),
+        title: Stack(
+          alignment: Alignment.center,
+          children: [
+            const Center(
+              child: Padding(
+                padding: EdgeInsets.only(top: 10),
+                child: Text(
+                  'Upload Details',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              top: 0,
+              right: 0,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Icon(Icons.close_sharp),
+              ),
+            ),
+          ],
+        ),
         content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -30,23 +63,25 @@ Future<void> showUploadDialog(BuildContext context) async {
                   }
                 },
                 child: Container(
-                  width: 100,
-                  height: 100,
+                  width: 250,
+                  height: 250,
                   color: Colors.grey[200],
                   child: selectedImage != null
                       ? Image.file(selectedImage!, fit: BoxFit.cover)
                       : const Icon(Icons.add_a_photo, size: 50),
                 ),
               ),
-              const SizedBox(height: 10),
-              TextField(
+              const SizedBox(height: 20),
+              CustomTextField(
                 controller: nameController,
-                decoration: const InputDecoration(labelText: 'Name'),
+                hintText: 'Name',
+                width: double.infinity,
               ),
-              const SizedBox(height: 10),
-              TextField(
+              const SizedBox(height: 20),
+              CustomTextField(
                 controller: descriptionController,
-                decoration: const InputDecoration(labelText: 'Description'),
+                hintText: 'Description',
+                width: double.infinity,
               ),
             ],
           ),
@@ -56,9 +91,15 @@ Future<void> showUploadDialog(BuildContext context) async {
             onPressed: () {
               Navigator.of(context).pop(); // Close the dialog
             },
-            child: const Text('Cancel'),
+            child: const Text(
+              'Cancel',
+              style: TextStyle(
+                color: Color(0xFF000000),
+                fontSize: 16,
+              ),
+            ),
           ),
-          ElevatedButton(
+          reusableElevatedButton(
             onPressed: () async {
               if (selectedImage != null) {
                 // Upload the selected image and get the download URL
@@ -86,7 +127,7 @@ Future<void> showUploadDialog(BuildContext context) async {
                 print("Please select an image to upload.");
               }
             },
-            child: const Text('Upload'),
+            text: 'Upload',
           ),
         ],
       );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travel_mate/Screens/dialogbox_widget/add_review.dart';
+import 'package:travel_mate/Widgets/custom_Button.dart';
 import 'review_list.dart'; // Import the ReviewList widget
 
 class DetailPage extends StatelessWidget {
@@ -19,15 +20,23 @@ class DetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
-        title: Text(name),
+        title: Text(
+          name,
+          style: const TextStyle(color: Color(0xFFFFFFFF), fontWeight: FontWeight.bold),
+        ),
         centerTitle: true,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Color(0xFFFFFFFF)),
       ),
-      body: Column(
+      body: Stack(
         children: [
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.only(bottom: 65),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -35,60 +44,82 @@ class DetailPage extends StatelessWidget {
                     Image.network(
                       imageUrl!,
                       fit: BoxFit.cover,
-                      height: 200,
+                      height: 400,
                       width: double.infinity,
                     )
                   else
                     const Icon(
                       Icons.image_not_supported,
-                      size: 100,
+                      size: 350,
                       color: Colors.grey,
                     ),
-                  const SizedBox(height: 16),
-                  Text(
-                    name,
-                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  
+                  // Picture Details
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(10),
+                    color: Color(0xFFFFFFFF),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          name,
+                          style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          description,
+                          style: const TextStyle( fontSize: 16, color: Color(0xFF808080)),
+                        ),
+                      ],
+                    ),
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    description,
-                    style: const TextStyle(fontSize: 16),
+                  const SizedBox(height: 10),
+                      
+                  // Review
+                  Container(
+                    width: double.infinity,
+                    color: const Color(0xffFFFFFF),
+                    padding: const EdgeInsets.all(10),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "Reviews",
+                          style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
+                        ),
+                        const Divider(thickness: 0.5),
+                        
+                        ReviewList(documentId: id),
+                        
+                      ],
+                    ),
                   ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    "Reviews",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 8),
-                  SizedBox(
-                    height: 300, // Set a fixed height for the reviews section
-                    child: ReviewList(documentId: id),
-                  ),
+                  
                 ],
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 20),
-            child: ElevatedButton(
-              onPressed: () async {
-                if (id.isNotEmpty) {
-                  await reviewDialog(context, id);
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("No valid document found to add a review."),
-                    ),
-                  );
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size(350, 60),
-                backgroundColor: Colors.green,
-              ),
-              child: const Text(
-                'Write a Review',
-                style: TextStyle(fontSize: 18, color: Colors.white),
+          Positioned(
+            bottom: 10,
+            left: 20,
+            right: 20,
+            child: SizedBox(
+              height: 45,
+              child: reusableElevatedButton(
+                text: 'Write a review', 
+                onPressed: () async {
+                  if (id.isNotEmpty) {
+                    await reviewDialog(context, id);
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("No valid document found to add a review."),
+                      ),
+                    );
+                  }
+                },
               ),
             ),
           ),
