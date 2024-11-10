@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 
 class LogoAppBar extends StatelessWidget implements PreferredSizeWidget {
 
@@ -19,6 +20,10 @@ class LogoAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
       centerTitle: true, // Center the title
+      leading: IconButton(
+        onPressed: () {},
+        icon: Icon(Iconsax.logout),
+      ),
     );
   }
 
