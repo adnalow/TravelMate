@@ -63,18 +63,37 @@ class _ExpenseTrackerScreenState extends State<ExpenseTrackerScreen> {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        titlePadding: const EdgeInsets.all(10),
+        titlePadding: const EdgeInsets.fromLTRB(10, 5, 5, 0),
         contentPadding: const EdgeInsets.all(15),
         actionsPadding: const EdgeInsets.only(right: 15, bottom: 10),
-        title: const Text(
-          "Adjust Balance", 
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(5.0),
+        ),
+        title: Stack(
+          alignment: Alignment.center,
+          children: [
+            const Center(
+              child: Padding(
+                padding: EdgeInsets.only(top: 10),
+                child: Text(
+                  'Adjust Balance',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              top: 0,
+              right: 0,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Icon(Icons.close_sharp),
+              ),
+            ),
+          ],
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min, // Adjust dialog size
@@ -88,56 +107,34 @@ class _ExpenseTrackerScreenState extends State<ExpenseTrackerScreen> {
           ],
         ),
         actions: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                ),
-                onPressed: () {
-                  Navigator.pop(context); // Go back to the previous screen
-                },
-                child: const Text(
-                  'Back',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w100,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 10),
-              reusableElevatedButton(
-                text: 'Update',
-                onPressed: () async {
-                  int? amount = int.tryParse(amountController.text);
-                  if (amount != null) {
-                    setState(() {
-                      tbalance = amount; // Set the new balance based on user input
-                    });
-              
-                    // Save the new balance to local storage
-                    final prefs = await SharedPreferences.getInstance();
-                    await prefs.setInt('tbalance', tbalance);
-              
-                    // Optionally, update the history and save it if needed
-                    history.insert(0,{
-                      "title": "Balance Adjusted",
-                      "amount": amount,
-                      "timestamp": DateFormat('yyyy-MM-dd – kk:mm').format(DateTime.now()),
-                    });
-                    await prefs.setString('history', history.map((entry) {
-                      return "${entry['title']}|${entry['amount']}|${entry['timestamp']}";
-                    }).join(';'));
-              
-                    // Clear the input field after saving
-                    amountController.clear();
-                  }
-                  Navigator.of(context).pop(); // Close the dialog after adjusting
-                },
-              ),
-            ],
+          reusableElevatedButton(
+            text: 'Update',
+            onPressed: () async {
+              int? amount = int.tryParse(amountController.text);
+              if (amount != null) {
+                setState(() {
+                  tbalance = amount; // Set the new balance based on user input
+                });
+          
+                // Save the new balance to local storage
+                final prefs = await SharedPreferences.getInstance();
+                await prefs.setInt('tbalance', tbalance);
+          
+                // Optionally, update the history and save it if needed
+                history.insert(0,{
+                  "title": "Balance Adjusted",
+                  "amount": amount,
+                  "timestamp": DateFormat('yyyy-MM-dd – kk:mm').format(DateTime.now()),
+                });
+                await prefs.setString('history', history.map((entry) {
+                  return "${entry['title']}|${entry['amount']}|${entry['timestamp']}";
+                }).join(';'));
+          
+                // Clear the input field after saving
+                amountController.clear();
+              }
+              Navigator.of(context).pop(); // Close the dialog after adjusting
+            },
           ),
         ],
       );
