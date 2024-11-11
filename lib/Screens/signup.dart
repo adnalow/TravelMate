@@ -93,7 +93,8 @@ class _SignupPageState extends State<SignupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false, // Prevents resizing when the keyboard appears
+      resizeToAvoidBottomInset:
+          false, // Prevents resizing when the keyboard appears
       body: Stack(
         children: [
           Container(
@@ -104,7 +105,6 @@ class _SignupPageState extends State<SignupPage> {
               ),
             ),
           ),
-
           Center(
             child: Padding(
               padding: const EdgeInsets.all(10.0),
@@ -155,7 +155,8 @@ class _SignupPageState extends State<SignupPage> {
                         onPressed: isLoading ? null : signup,
                         child: isLoading
                             ? const CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(Colors.white),
                               )
                             : const Text(
                                 'Sign Up',
@@ -178,16 +179,15 @@ class _SignupPageState extends State<SignupPage> {
                         ),
                         children: [
                           TextSpan(
-                            text: 'Sign In',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF48B89F),
-                            ),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                Get.to(LoginScreen());
-                              }
-                          ),
+                              text: 'Sign In',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF48B89F),
+                              ),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  Get.to(LoginScreen());
+                                }),
                         ],
                       ),
                     ),
