@@ -1,11 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:travel_mate/Screens/dialogbox_widget/delete_place.dart';
+import 'package:travel_mate/Service/user_service.dart';
 import 'package:travel_mate/Widgets/custom_AppBar.dart';
 import 'package:travel_mate/Widgets/custom_Button.dart';
 import 'package:travel_mate/Screens/dialogbox_widget/add_place.dart';
 import 'package:travel_mate/discover_utils/models/featured_place.dart';
 import 'package:travel_mate/discover_utils/services/db_service.dart';
 import 'package:travel_mate/Screens/place_details.dart';
+
 
 class DiscoverScreen extends StatefulWidget {
   const DiscoverScreen({super.key});
@@ -16,6 +20,23 @@ class DiscoverScreen extends StatefulWidget {
 
 class _DiscoverScreenState extends State<DiscoverScreen> {
   final DatabaseService _databaseService = DatabaseService();
+  final UserService _userService = UserService();
+
+  String? userId;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeUserId();
+  }
+
+  Future<void> _initializeUserId() async {
+    final String email = FirebaseAuth.instance.currentUser?.email ?? '';
+    final fetchedUserId = await _userService.fetchUserIdByEmail(email);
+    setState(() {
+      userId = fetchedUserId;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -133,12 +154,31 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                     const SizedBox(height: 10),
-                                    Text(
-                                      'Reviews ($reviewCount)',
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w500,
-                                      ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Reviews ($reviewCount)',
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            if(userId == place.userId){
+                                              showDeleteDialog(context, place.id);
+                                            }
+                                          },
+                                          child: const Icon(
+                                            Icons.more_vert,
+                                            size: 20,
+                                            color: Colors
+                                                .grey, // Adjust color if necessary
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),

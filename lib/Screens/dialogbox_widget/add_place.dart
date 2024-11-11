@@ -1,10 +1,13 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_mate/Widgets/customTextField.dart';
 import 'package:travel_mate/Widgets/custom_Button.dart';
 import 'package:travel_mate/discover_utils/utils.dart';
 import 'package:travel_mate/discover_utils/models/featured_place.dart';
 import 'package:travel_mate/discover_utils/services/db_service.dart';
+import 'package:travel_mate/service/user_service.dart';
 
 Future<void> showUploadDialog(BuildContext context) async {
   final TextEditingController nameController = TextEditingController();
@@ -12,6 +15,7 @@ Future<void> showUploadDialog(BuildContext context) async {
   File? selectedImage;
 
   final DatabaseService _databaseService = DatabaseService();
+  final UserService _userService = UserService();
 
   return showDialog(
     context: context,
@@ -105,13 +109,18 @@ Future<void> showUploadDialog(BuildContext context) async {
                 // Upload the selected image and get the download URL
                 String? imageUrl = await uploadFileForUser(selectedImage!);
                 String primaryId = generateId(10);
-                if (imageUrl != null) {
+
+                final String email = FirebaseAuth.instance.currentUser?.email ?? '';
+                final String? userId = await _userService.fetchUserIdByEmail(email);
+
+                if (imageUrl != null && userId != null) {
                   // Create a TravelmateDB object with image URL
                   TravelmateDB travelmateDB = TravelmateDB(
                     description: descriptionController.text,
                     id: primaryId,
                     name: nameController.text,
                     image_url: imageUrl,
+                    userId: userId,
                   );
 
                   await _databaseService.addFeaturedPlace(travelmateDB);
@@ -134,3 +143,4 @@ Future<void> showUploadDialog(BuildContext context) async {
     },
   );
 }
+
