@@ -58,6 +58,16 @@ class _ExpenseTrackerScreenState extends State<ExpenseTrackerScreen> {
     prefs.setString('history', historyString);
   }
 
+
+   // Function to clear history from local storage
+  Future<void> _clearHistory() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      history.clear(); // Clear the history list
+    });
+    await prefs.remove('history'); // Remove history from local storage
+  }
+
   void _showAdjustDialog(BuildContext context) {
   showDialog(
     context: context,
@@ -332,17 +342,22 @@ class _ExpenseTrackerScreenState extends State<ExpenseTrackerScreen> {
                     padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
                     child: Column(
                       children: [
-                        const Row(
+                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
+                            const Text(
                               "History",
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
-                            Icon(Icons.menu),
+                            IconButton(
+                              onPressed: _clearHistory,
+                              icon: const Icon(
+                                Icons.delete,
+                              ),
+                            ),
                           ],
                         ),
                         const SizedBox(height: 10),
