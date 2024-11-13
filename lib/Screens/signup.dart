@@ -3,8 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:travel_mate/Screens/login.dart';
-import 'package:travel_mate/Widgets/backAppBar.dart';
 import 'package:travel_mate/Widgets/customTextField.dart';
 import 'package:travel_mate/Widgets/custom_Button.dart';
 import 'package:travel_mate/wrapper.dart';
@@ -93,8 +91,7 @@ class _SignupPageState extends State<SignupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset:
-          false, // Prevents resizing when the keyboard appears
+      resizeToAvoidBottomInset: false, // Prevents resizing when the keyboard appears
       body: Stack(
         children: [
           Container(
@@ -186,7 +183,7 @@ class _SignupPageState extends State<SignupPage> {
                               ),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
-                                  Get.to(LoginScreen());
+                                  Get.back();
                                 }),
                         ],
                       ),
