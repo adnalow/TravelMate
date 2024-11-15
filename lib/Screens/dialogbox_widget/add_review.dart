@@ -1,9 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart'; // Import FirebaseAuth to get current user
 import 'package:flutter/material.dart';
 import 'package:travel_mate/Widgets/custom_Button.dart';
 import 'package:travel_mate/discover_utils/utils.dart';
 
 Future<void> reviewDialog(BuildContext context, String documentId) async {
   TextEditingController reviewController = TextEditingController();
+
+  // Get the current user's email
+  final String? userEmail = FirebaseAuth.instance.currentUser?.email;
 
   await showDialog(
     context: context,
@@ -54,9 +58,10 @@ Future<void> reviewDialog(BuildContext context, String documentId) async {
                 borderSide: BorderSide(color: Color(0xFF57CC99)),
               ),
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey), 
+                borderSide: BorderSide(color: Colors.grey),
               ),
-              contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              contentPadding:
+                  EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             ),
           ),
         ),
@@ -64,14 +69,22 @@ Future<void> reviewDialog(BuildContext context, String documentId) async {
           reusableElevatedButton(
             onPressed: () async {
               String reviewText = reviewController.text;
-              print(reviewText);
-              
+
               try {
-                // Call the updated function to add the review to Firestore
-                await addReview(documentId, reviewText);
-          
-                Navigator.of(context).pop();
-                print("Review added successfully!");
+                // Ensure email is not null before adding the review
+                if (userEmail != null) {
+                  await addReview(documentId, reviewText, userEmail);
+                  Navigator.of(context).pop();
+                  print("Review added successfully!");
+                } else {
+                  print("User not logged in.");
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content:
+                          Text("You need to be logged in to submit a review."),
+                    ),
+                  );
+                }
               } catch (e) {
                 print("Failed to add review: $e");
                 ScaffoldMessenger.of(context).showSnackBar(

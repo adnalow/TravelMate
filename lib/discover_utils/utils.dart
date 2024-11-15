@@ -53,7 +53,7 @@ String generateId(int length) {
 }
 
 // Function to add a review with date to Firestore
-Future<void> addReview(String documentId, String reviewText) async {
+Future<void> addReview(String documentId, String reviewText, String userEmail) async {
   // Get the current date and time
   DateTime currentDate = DateTime.now();
 
@@ -66,6 +66,7 @@ Future<void> addReview(String documentId, String reviewText) async {
       'id': documentId, // Link to the associated TravelmateDB entry
       'review': reviewText,
       'date': Timestamp.fromDate(currentDate),
+      'email': userEmail,
     });
 
     print("Review added with date successfully!");

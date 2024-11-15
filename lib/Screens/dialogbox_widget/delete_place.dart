@@ -1,6 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:travel_mate/Service/user_service.dart';
 import 'package:travel_mate/discover_utils/services/db_service.dart';
 
 Future<void> showDeleteDialog(BuildContext context, String placeId) async {

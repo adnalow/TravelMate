@@ -89,7 +89,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                         }
                         return GestureDetector(
                           onTap: () {
-                            Navigator.push(
+                            Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => DetailPage(
