@@ -46,15 +46,6 @@ class _CollaborativeScreenState extends State<CollaborativeScreen> {
     }
   }
 
-  Future<void> signout() async {
-    await FirebaseAuth.instance.signOut();
-    if (mounted) {
-      setState(() {
-        groups.clear(); // Clear the groups when signing out
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,6 +58,13 @@ class _CollaborativeScreenState extends State<CollaborativeScreen> {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    // Ensure that the groups list is cleared when the screen is disposed
+    groups.clear(); // Clear groups when leaving this screen
+    super.dispose();
   }
 
   Positioned planAdder() {
@@ -323,10 +321,6 @@ class _CollaborativeScreenState extends State<CollaborativeScreen> {
           fontSize: 24,
           fontWeight: FontWeight.bold,
         ),
-      ),
-      leading: IconButton(
-        icon: Icon(Icons.login_rounded),
-        onPressed: () => signout(),
       ),
       backgroundColor: Colors.white,
       elevation: 0.0,
