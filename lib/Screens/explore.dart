@@ -10,7 +10,6 @@ import 'package:travel_mate/discover_utils/models/featured_place.dart';
 import 'package:travel_mate/discover_utils/services/db_service.dart';
 import 'package:travel_mate/Screens/place_details.dart';
 
-
 class DiscoverScreen extends StatefulWidget {
   const DiscoverScreen({super.key});
 
@@ -51,7 +50,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
                 }
-            
+
                 if (!snapshot.hasData ||
                     snapshot.data!.docs.isEmpty ||
                     snapshot.data!.docs.every((doc) =>
@@ -59,11 +58,11 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                         (doc.data())['name'].toString().isEmpty)) {
                   return const Center(child: Text("No items to display."));
                 }
-            
+
                 final featuredPlaces = snapshot.data!.docs.map((doc) {
                   return TravelmateDB.fromJson(doc.data());
                 }).toList();
-            
+
                 return GridView.builder(
                   padding: const EdgeInsets.only(
                       top: 10, right: 10, bottom: 65, left: 10),
@@ -77,7 +76,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                   itemCount: featuredPlaces.length,
                   itemBuilder: (BuildContext context, int index) {
                     final place = featuredPlaces[index];
-            
+
                     return FutureBuilder<QuerySnapshot>(
                       future: FirebaseFirestore.instance
                           .collection('reviews')
@@ -119,24 +118,25 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                               children: [
                                 Expanded(
                                   child: ClipRRect(
-                                    borderRadius: const BorderRadius.vertical(
-                                      top: Radius.circular(5),
-                                    ),
-                                    child: place.image_url != null
-                                        ? Image.network(
-                                            place.image_url,
-                                            fit: BoxFit.cover,
-                                          )
-                                        : const Icon(
-                                            Icons.image_not_supported,
-                                            size: 50,
-                                          ),
-                                  ),
+                                      borderRadius: const BorderRadius.vertical(
+                                        top: Radius.circular(5),
+                                      ),
+                                      child: Image.network(
+                                        place.image_url!,
+                                        fit: BoxFit.cover,
+                                        errorBuilder:
+                                            (context, error, stackTrace) =>
+                                                const Icon(
+                                          Icons.broken_image,
+                                          size: 50,
+                                        ),
+                                      )),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(10.0),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         place.name,
@@ -168,8 +168,10 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                                           ),
                                           GestureDetector(
                                             onTap: () {
-                                              if(userId == place.userId){
-                                                showDeleteDialog(context, place.id);
+                                              if (userId == place.userId &&
+                                                  userId != null) {
+                                                showDeleteDialog(
+                                                    context, place.id);
                                               }
                                             },
                                             child: const Icon(

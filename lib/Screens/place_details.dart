@@ -26,23 +26,26 @@ class DetailPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           name,
-          style: const TextStyle(color: Color(0xFFFFFFFF), fontWeight: FontWeight.bold),
+          style: const TextStyle(
+              color: Color(0xFFFFFFFF), fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: Padding(
-        padding: const EdgeInsets.only(left: 8.0),
-        child: IconButton(
-          icon: const Icon(Iconsax.arrow_left_2, color: Color(0xFFFFFFFF), size: 28),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          padding: const EdgeInsets.only(left: 8.0),
+          child: IconButton(
+            icon: const Icon(Iconsax.arrow_left_2,
+                color: Color(0xFFFFFFFF), size: 28),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
         ),
-      ),
       ),
       body: Stack(
         children: [
+          // Replace Expanded with SingleChildScrollView to avoid the error
           SingleChildScrollView(
             padding: const EdgeInsets.only(bottom: 65),
             child: Column(
@@ -61,7 +64,7 @@ class DetailPage extends StatelessWidget {
                     size: 350,
                     color: Colors.grey,
                   ),
-                
+
                 // Picture Details
                 Container(
                   width: double.infinity,
@@ -73,18 +76,20 @@ class DetailPage extends StatelessWidget {
                     children: [
                       Text(
                         name,
-                        style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                            fontSize: 26, fontWeight: FontWeight.bold),
                       ),
                       Text(
                         description,
-                        style: const TextStyle( fontSize: 16, color: Color(0xFF808080)),
+                        style: const TextStyle(
+                            fontSize: 16, color: Color(0xFF808080)),
                       ),
                     ],
                   ),
                 ),
                 const SizedBox(height: 10),
-                    
-                // Review
+
+                // Review Section
                 Container(
                   width: double.infinity,
                   color: const Color(0xffFFFFFF),
@@ -95,16 +100,14 @@ class DetailPage extends StatelessWidget {
                     children: [
                       const Text(
                         "Reviews",
-                        style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
+                        style: TextStyle(
+                            fontSize: 17, fontWeight: FontWeight.w600),
                       ),
                       const Divider(thickness: 0.5),
-                      
                       ReviewList(documentId: id),
-                      
                     ],
                   ),
                 ),
-                
               ],
             ),
           ),
@@ -115,14 +118,15 @@ class DetailPage extends StatelessWidget {
             child: SizedBox(
               height: 45,
               child: reusableElevatedButton(
-                text: 'Write a review', 
+                text: 'Write a review',
                 onPressed: () async {
                   if (id.isNotEmpty) {
                     await reviewDialog(context, id);
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text("No valid document found to add a review."),
+                        content:
+                            Text("No valid document found to add a review."),
                       ),
                     );
                   }
