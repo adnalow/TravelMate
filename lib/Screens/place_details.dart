@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:travel_mate/Screens/dialogbox_widget/add_review.dart';
 import 'package:travel_mate/Screens/explore.dart';
 import 'package:travel_mate/Widgets/custom_Button.dart';
+import 'package:travel_mate/controllers/tabtab_controller.dart';
+import 'package:travel_mate/main_screen.dart';
 import 'review_list.dart'; // Import the ReviewList widget
 import 'package:iconsax/iconsax.dart';
 
@@ -34,20 +38,20 @@ class DetailPage extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: Padding(
-          padding: const EdgeInsets.only(left: 8.0),
-          child: IconButton(
-            icon: const Icon(Iconsax.arrow_left_2,
-                color: Color(0xFFFFFFFF), size: 28),
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const DiscoverScreen(),
-                ),
-              );
-            },
-          ),
+        padding: const EdgeInsets.only(left: 8.0),
+        child: IconButton(
+          icon: const Icon(Iconsax.arrow_left_2,
+              color: Color(0xFFFFFFFF), size: 28),
+          onPressed: () {
+            // Use GetX to update the tab and navigate back to MainScreen
+            final TabtabController tabController = Get.find<TabtabController>();
+            tabController.selectIndex(4); // Index 4 for Discover tab
+            
+            // Navigate back to MainScreen while preserving bottom navigation
+            Get.off(() => const MainScreen());
+          },
         ),
+      ),
       ),
       body: Stack(
         children: [
@@ -132,7 +136,7 @@ class DetailPage extends StatelessWidget {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content:
-                          Text("No valid document found to add a review."),
+                            Text("No valid document found to add a review."),
                       ),
                     );
                   }
