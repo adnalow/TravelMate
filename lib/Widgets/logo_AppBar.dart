@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
 class LogoAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final VoidCallback onSignOut;
 
-  const LogoAppBar({super.key});
+  const LogoAppBar({super.key, required this.onSignOut});
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.transparent, // Make background transparent
-      toolbarHeight: 50, // Set the height of the app bar
-      automaticallyImplyLeading: false, 
+      backgroundColor: Colors.transparent,
+      toolbarHeight: 50,
+      automaticallyImplyLeading: false,
       title: const Text(
         'TravelMate',
         style: TextStyle(
@@ -19,14 +20,14 @@ class LogoAppBar extends StatelessWidget implements PreferredSizeWidget {
           fontWeight: FontWeight.w700,
         ),
       ),
-      centerTitle: true, // Center the title
+      centerTitle: true,
       leading: IconButton(
-        onPressed: () {},
-        icon: Icon(Iconsax.logout),
+        onPressed: onSignOut, // Use the signout callback here
+        icon: const Icon(Iconsax.logout),
       ),
     );
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(50); // Return the preferred height
+  Size get preferredSize => const Size.fromHeight(50);
 }
