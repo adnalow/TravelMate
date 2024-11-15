@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_mate/Widgets/custom_Button.dart';
 import 'package:travel_mate/Widgets/logo_AppBar.dart';
@@ -7,11 +8,15 @@ class HomeScreen extends StatelessWidget {
 
   const HomeScreen({super.key, required this.onSelectIndex});
 
+  Future<void> signout() async {
+    await FirebaseAuth.instance.signOut();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
-      appBar: const LogoAppBar(),
+      appBar: LogoAppBar(onSignOut: signout),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(10, 10, 10, 30),
         child: Center(

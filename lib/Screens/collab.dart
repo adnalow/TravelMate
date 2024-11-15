@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:iconsax/iconsax.dart';
+import 'package:travel_mate/Widgets/custom_AppBar.dart';
 import 'package:travel_mate/Widgets/customTextField.dart';
 import 'package:travel_mate/Widgets/custom_Button.dart';
 import 'package:travel_mate/models/groups_model.dart';
@@ -59,7 +59,7 @@ class _CollaborativeScreenState extends State<CollaborativeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
-      appBar: appBar(),
+      appBar: const CustomAppBar(title: 'Collaborative Planner'),
       body: Stack(
         children: [
           displayGroups(),
