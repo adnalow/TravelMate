@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:travel_mate/Screens/dialogbox_widget/add_review.dart';
 import 'package:travel_mate/Widgets/custom_Button.dart';
 import 'review_list.dart'; // Import the ReviewList widget
+import 'package:iconsax/iconsax.dart';
 
 class DetailPage extends StatelessWidget {
   final String name;
@@ -30,7 +31,15 @@ class DetailPage extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
-        iconTheme: const IconThemeData(color: Color(0xFFFFFFFF)),
+        leading: Padding(
+        padding: const EdgeInsets.only(left: 8.0),
+        child: IconButton(
+          icon: const Icon(Iconsax.arrow_left_2, color: Color(0xFFFFFFFF), size: 28),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
       ),
       body: Stack(
         children: [
