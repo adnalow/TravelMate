@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travel_mate/Screens/dialogbox_widget/add_review.dart';
+import 'package:travel_mate/Screens/explore.dart';
 import 'package:travel_mate/Widgets/custom_Button.dart';
 import 'review_list.dart'; // Import the ReviewList widget
 import 'package:iconsax/iconsax.dart';
@@ -38,7 +39,12 @@ class DetailPage extends StatelessWidget {
             icon: const Icon(Iconsax.arrow_left_2,
                 color: Color(0xFFFFFFFF), size: 28),
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const DiscoverScreen(),
+                ),
+              );
             },
           ),
         ),
@@ -126,7 +132,7 @@ class DetailPage extends StatelessWidget {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content:
-                            Text("No valid document found to add a review."),
+                          Text("No valid document found to add a review."),
                       ),
                     );
                   }

@@ -4,11 +4,13 @@ class Reviews {
   String id;
   String review;
   DateTime date;
+  String email; // New field to store the user's email
 
   Reviews({
     required this.id,
     required this.review,
     required this.date,
+    required this.email, // Include email in the constructor
   });
 
   // Factory constructor to create a Reviews object from JSON
@@ -17,6 +19,7 @@ class Reviews {
       id: json['id'],
       review: json['review'],
       date: (json['date'] as Timestamp).toDate(), // Assuming date is a Timestamp from Firebase
+      email: json['email'], // Get email from JSON
     );
   }
 
@@ -26,6 +29,7 @@ class Reviews {
       'id': id,
       'review': review,
       'date': Timestamp.fromDate(date), // Convert DateTime to Firebase Timestamp
+      'email': email, // Add email to JSON
     };
   }
 }
