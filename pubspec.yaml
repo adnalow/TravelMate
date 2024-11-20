@@ -73,11 +73,7 @@ flutter:
 
   assets:
     - assets/icons/
-    - assets/images/background.png
-    - assets/images/illustration1.png
-    - assets/images/illustration2.png
-    - assets/images/illustration2cropped.png
-    - assets/images/japan.jpg
+    - assets/images/
 
   fonts:
     - family: Mulish
