@@ -34,13 +34,13 @@ class GroupModel {
     return GroupModel(
       id: id,
       title: map['title'],
-      boxColor: Color(map['boxColor']),
+      boxColor: Color(map['boxColor']), // Convert the integer to Color
       label: map['label'],
       thingsToBring: map['thingsToBring'],
       date: map['date'],
       location: map['location'],
       creatorId: map['creatorId'],
-      memberIds: List<String>.from(map['memberIds'] ?? []),
+      memberIds: List<String>.from(map['memberIds'] ?? []), 
     );
   }
 
