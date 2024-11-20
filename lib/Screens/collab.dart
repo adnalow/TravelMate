@@ -46,6 +46,57 @@ class _CollaborativeScreenState extends State<CollaborativeScreen> {
     }
   }
 
+  Future<void> _showColorPickerDialog(GroupModel group) async {
+    // List of predefined colors for the picker
+    List<Color> colorOptions = [
+      const Color(0xFF00A5E0),
+      const Color(0xFF38A3A5),
+      const Color(0xFFff70a6),
+      const Color(0xFFef8275),
+      const Color(0xFF5c3d99),
+      const Color(0xFF779be7),
+    ];
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Select Color'),
+          content: SingleChildScrollView(
+            child: Wrap(
+              spacing: 10,
+              runSpacing: 10,
+              children: colorOptions.map((color) {
+                return GestureDetector(
+                  onTap: () async {
+                    // Update the group color locally
+                    group.boxColor = color;
+
+                    // Update the color in Firestore
+                    await FirebaseFirestore.instance
+                        .collection('groups')
+                        .doc(group.id)
+                        .update({'boxColor': color.value});
+
+                    // Refresh the state to reflect the change
+                    setState(() {});
+
+                    // Close the dialog after selecting the color
+                    Navigator.of(context).pop();
+                  },
+                  child: CircleAvatar(
+                    backgroundColor: color,
+                    radius: 30,
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -103,90 +154,91 @@ class _CollaborativeScreenState extends State<CollaborativeScreen> {
   }
 
   Padding displayGroups() {
-  return Padding(
-    padding: const EdgeInsets.all(10.0),
-    child: Container(
-      height: 620,
-      child: groups.isEmpty
-          ? Center(
-              child: Text(
-                'No groups available. Add a travel plan!',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey[600],
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Container(
+        height: 620,
+        child: groups.isEmpty
+            ? Center(
+                child: Text(
+                  'No groups available. Add a travel plan!',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey[600],
+                  ),
                 ),
-              ),
-            )
-          : ListView.separated(
-              itemCount: groups.length,
-              separatorBuilder: (context, index) => const SizedBox(height: 10),
-              itemBuilder: (context, index) {
-                return InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ContentPage(
-                          onLeaveGroup: () {
-                            _removeGroup(groups[index].id);
-                          },
-                          group: groups[index],
+              )
+            : ListView.separated(
+                itemCount: groups.length,
+                separatorBuilder: (context, index) =>
+                    const SizedBox(height: 10),
+                itemBuilder: (context, index) {
+                  return InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ContentPage(
+                            onLeaveGroup: () {
+                              _removeGroup(groups[index].id);
+                            },
+                            group: groups[index],
+                          ),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      height: 100,
+                      decoration: BoxDecoration(
+                        color: groups[index].boxColor,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  groups[index].title,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () => _showColorPickerDialog(groups[
+                                      index]), // Add the function to change colors here
+                                  child: SvgPicture.asset(
+                                    'assets/icons/three-dots.svg',
+                                    height: 20,
+                                    width: 20,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Text(
+                              groups[index].label,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    );
-                  },
-                  child: Container(
-                    height: 100,
-                    decoration: BoxDecoration(
-                      color: groups[index].boxColor,
-                      borderRadius: BorderRadius.circular(5),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(15),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                groups[index].title,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () {}, // Add the function to change colors here
-                                child: SvgPicture.asset(
-                                  'assets/icons/three-dots.svg',
-                                  height: 20,
-                                  width: 20,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Text(
-                            groups[index].label,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-    ),
-  );
-}
-
+                  );
+                },
+              ),
+      ),
+    );
+  }
 
   Future<void> openTravelPlanDialog() async {
     return showDialog(
