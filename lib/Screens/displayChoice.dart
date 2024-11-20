@@ -34,7 +34,7 @@ class DisplayChoiceState extends State<DisplayChoice> {
     super.initState();
 
     // Initialize the model in initState
-    const apiKey = 'AIzaSyDxrEyb5uvig_l6zHoYUnsohReFjzuPkDc'; // Replace with your actual API key
+    const apiKey = 'AIzaSyCG2fHWWQVSjMsIeJFrLZs3Ha0cc9tb3cY'; // Replace with your actual API key
     model = GenerativeModel(
       model: 'gemini-1.5-flash-latest',
       apiKey: apiKey,
@@ -75,13 +75,13 @@ class DisplayChoiceState extends State<DisplayChoice> {
 
   // Function to extract name and description
   void _extractNameAndDescription(String response) {
-    final nameMatch = RegExp(r"Name:\s*\*\*(.*)\*\*").firstMatch(response);
+    
+    final nameMatch = RegExp(r"Name:\s*(.*)").firstMatch(response);
     final descriptionMatch = RegExp(r"Description:\s*(.*)").firstMatch(response);
 
     setState(() {
-      // Remove ** from name if found
-      placeName = nameMatch?.group(1) ?? "Name not found";
-      description = descriptionMatch?.group(1) ?? "Description not found";
+      placeName = nameMatch?.group(1)?.replaceAll("**", "").trim() ?? "Name not found";
+      description = descriptionMatch?.group(1)?.trim() ?? "Description not found";
     });
   }
 
