@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
+import 'package:intl/intl.dart';
 import 'package:travel_mate/Widgets/custom_AppBar.dart';
 import 'package:travel_mate/Widgets/custom_Button.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert'; // For encoding and decoding JSON
 
 class DisplayChoice extends StatefulWidget {
   final String promptFormat; // Declare the promptFormat variable
@@ -73,17 +76,51 @@ class DisplayChoiceState extends State<DisplayChoice> {
     }
   }
 
-  // Function to extract name and description
-  void _extractNameAndDescription(String response) {
-    
-    final nameMatch = RegExp(r"Name:\s*(.*)").firstMatch(response);
-    final descriptionMatch = RegExp(r"Description:\s*(.*)").firstMatch(response);
+void _extractNameAndDescription(String response) {
+  final nameMatch = RegExp(r"Name:\s*(.*)").firstMatch(response);
+  final descriptionMatch = RegExp(r"Description:\s*(.*)").firstMatch(response);
 
-    setState(() {
-      placeName = nameMatch?.group(1)?.replaceAll("**", "").trim() ?? "Name not found";
-      description = descriptionMatch?.group(1)?.trim() ?? "Description not found";
-    });
-  }
+  setState(() {
+    placeName = nameMatch?.group(1)?.replaceAll("**", "").trim() ?? "Name not found";
+    description = descriptionMatch?.group(1)?.trim() ?? "Description not found";
+
+    // Save placeName to recommended places
+    if (placeName != "Name not found") {
+      saveRecommendedPlace(placeName!);
+    }
+  });
+}
+
+Future<void> saveRecommendedPlace(String placeName) async {
+  final prefs = await SharedPreferences.getInstance();
+
+  // Get existing recommended places
+  final String? recommendedPlaceJson = prefs.getString('recommended_place');
+  List<Map<String, String>> recommendedPlaces = recommendedPlaceJson != null
+      ? (json.decode(recommendedPlaceJson) as List)
+          .map((item) => Map<String, String>.from(item as Map)) // Ensure conversion
+          .toList()
+      : [];
+
+  // Format the current date and time to exclude milliseconds
+  String timestamp = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
+
+  // Add the new entry with formatted timestamp
+  recommendedPlaces.add({
+    'placeName': placeName,
+    'timestamp': timestamp, // Save the formatted timestamp
+  });
+
+  // Save updated recommended places back to SharedPreferences
+  await prefs.setString('recommended_place', json.encode(recommendedPlaces));
+
+  // Trigger the onSelectIndex callback
+  widget.onSelectIndex(recommendedPlaces.length - 1);
+
+  // Debugging line to confirm the saving process
+  debugPrint("Updated recommended places: ${json.encode(recommendedPlaces)}");
+}
+
 
   @override
   Widget build(BuildContext context) {
