@@ -1,11 +1,23 @@
 import 'package:get/get.dart';
 
 class TabtabController extends GetxController {
-  // Use Rx<int> to make the selected index reactive
   var selectedIndex = 2.obs; // Default to the "Home" tab (index 2)
+  var indexHistory = <int>[2].obs; // Start with home index in history
 
-  // Function to update the selected index
   void selectIndex(int index) {
-    selectedIndex.value = index;
+    if (selectedIndex.value != index) {
+      indexHistory.add(selectedIndex.value);
+      selectedIndex.value = index;
+    }
+  }
+
+  bool goBack() {
+    if (indexHistory.isNotEmpty) {
+      selectedIndex.value = indexHistory.last;
+      indexHistory.removeLast();
+      return true;
+    }
+    return false;
   }
 }
+

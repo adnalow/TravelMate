@@ -18,23 +18,33 @@ class MainScreen extends StatelessWidget {
     final TabtabController tabController = Get.put(TabtabController());
 
     return Scaffold(
-      body: Obx(() {
-        // This will rebuild the selected screen based on the selected index
-        switch (tabController.selectedIndex.value) {
-          case 0:
-            return _buildNavigator(ItineraryScreen(), 'Itinerary');
-          case 1:
-            return CollaborativeScreen();
-          case 2:
-            return HomeScreen(onSelectIndex: tabController.selectIndex);
-          case 3:
-            return ExpenseTrackerScreen();
-          case 4:
-            return DiscoverScreen();
-          default:
-            return HomeScreen(onSelectIndex: tabController.selectIndex);
-        }
-      }),
+      body: PopScope(
+        canPop: false,
+        onPopInvoked: (didPop) {
+          if (didPop) return;
+          final bool canPop = tabController.goBack();
+          if (!canPop) {
+            Navigator.of(context).pop();
+          }
+        },
+        child: Obx(() {
+          // This will rebuild the selected screen based on the selected index
+          switch (tabController.selectedIndex.value) {
+            case 0:
+              return _buildNavigator(ItineraryScreen(), 'Itinerary');
+            case 1:
+              return CollaborativeScreen();
+            case 2:
+              return HomeScreen(onSelectIndex: tabController.selectIndex);
+            case 3:
+              return ExpenseTrackerScreen();
+            case 4:
+              return DiscoverScreen();
+            default:
+              return HomeScreen(onSelectIndex: tabController.selectIndex);
+          }
+        }),
+      ),
       bottomNavigationBar: Obx(() {
         // Reactive NavigationBar: it listens to selectedIndex and updates accordingly
         return NavigationBar(

@@ -89,6 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false, // Prevent default back button behavior
+      // ignore: deprecated_member_use
       onPopInvoked: (didPop) async {
         if (didPop) {
           return;
