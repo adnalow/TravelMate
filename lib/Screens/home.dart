@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:travel_mate/Widgets/custom_Button.dart';
 import 'package:travel_mate/Widgets/logo_AppBar.dart';
+import 'package:travel_mate/Widgets/onBack.dart';
 
 class HomeScreen extends StatelessWidget {
   final Function(int) onSelectIndex;
@@ -48,7 +50,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-
+    
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 15),
                   child: Column(
@@ -64,7 +66,7 @@ class HomeScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-
+    
                 Positioned(
                   bottom: 30,
                   left: 50,
