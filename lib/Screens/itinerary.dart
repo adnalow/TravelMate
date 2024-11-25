@@ -28,10 +28,10 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
   final List<String> options = [
     "Hotel", "Restaurant", "Night Club", "Mall",
     "Park", "Beach", "Sport Arena", "Church",
-    "Budget Hotel", "Fine Dining Restaurant", "Street Food",
-    "Music Venues", "National Park", "Museum",
-    "Sunrise/Sunset Points", "Snorkeling", "Private Resort",
-    "White Sand Beach", "Private Villas", "Honeymoon Suites"
+    "Camping Site", "Street Food", "Music Venues",
+    "Landmark", "Museum", "Snorkeling", "Villas",
+    "Sunset Spots", "Sunrise Spots", "Resort",
+     "Honeymoon Suites", "Spa", "Fun Activities"
   ];
 
   final List<String> selectedOptions = []; // Store selected options here
@@ -193,46 +193,127 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                   }).toList(),
                 ),
               ),
-              const SizedBox(height: 20),
-              Container(
-                padding: const EdgeInsets.all(10),
-                height: 235,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(5.0),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 1,
-                      spreadRadius: 1,
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+              const SizedBox(height: 10),
+
+              Padding(
+                padding: const EdgeInsets.only(left: 10, bottom: 20, right: 10),
+                child: Row(
                   children: [
-                    const Text(
-                      'History',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
+                    Expanded(
+                      child: SizedBox( 
+                        width: double.infinity,
+                        height: 45,
+                        child: reusableElevatedButton(
+                          text: 'Find me a destination!', 
+                        onPressed: () async {
+                            if (municipality == null || municipality!.isEmpty) {
+                              promptFormat =
+                                  "Give me one place in $country, in any part of province of $province that is fitted in this description: $preference. Use this format in giving my request: Name: {name of the place} Description: {2 sentences description of the place}.";
+                            } else {
+                              promptFormat =
+                                  "Give me one place in $country, province of $province, municipality of $municipality that is fitted in this description: $preference. Use this format in giving my request: Name: {name of the place} Description: {2 sentences description of the place}.";
+                            }
+                      
+                            // Navigate to DisplayChoice with a callback to reload the history
+                            await Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => DisplayChoice(
+                                  promptFormat: promptFormat,
+                                  onSelectIndex: (int index) {
+                                    _loadHistory(); // Refresh history after returning
+                                  },
+                                ),
+                              ),
+                            );
+                          },
+                        ),
                       ),
                     ),
-                    const Divider(color: Colors.grey), // Line separator
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: history.length,
-                        itemBuilder: (context, index) {
-                          final item = history[index];
-                          return ListTile(
-                            title: Text(
-                              item['placeName']!,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            subtitle: Text(item['timestamp']!),
+                    const SizedBox(width: 10),
+                    Container(
+                      width: 45,
+                      height: 45,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Color(0xFF57CC99),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black, // Shadow color
+                          // Offset of the shadow
+                            blurRadius: 0.1, // Blur radius
+                          ),
+                        ],
+                      ),
+                      child: IconButton(
+                        icon: const Icon(Icons.history, color: Colors.white), 
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                titlePadding: const EdgeInsets.fromLTRB(10, 5, 5, 0),
+                                contentPadding: const EdgeInsets.fromLTRB(15, 0, 15, 15),
+                                actionsPadding: const EdgeInsets.only(right: 15, bottom: 10),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                ),
+                                title: Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    const Center(
+                                      child: Padding(
+                                        padding: EdgeInsets.only(top: 10),
+                                        child: Text(
+                                          'History',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Positioned(
+                                      top: 0,
+                                      right: 0,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Icon(Icons.close_sharp),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                content: SizedBox(
+                                  width: double.maxFinite,
+                                  height: 250,
+                                  child: Column(
+                                    children: [
+                                      const Divider(color: Colors.grey), 
+                                      Flexible(
+                                        child: ListView.builder(
+                                          shrinkWrap: true,
+                                          itemCount: history.length,
+                                          itemBuilder: (context, index) {
+                                            final item = history[index];
+                                            return ListTile(
+                                              title: Text(
+                                                item['placeName']!,
+                                                style: const TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                              subtitle: Text(item['timestamp']!),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                      const Divider(color: Colors.grey), 
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
                           );
                         },
                       ),
@@ -241,36 +322,6 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                 ),
               ),
             ],
-          ),
-        ),
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.only(right: 20, bottom: 30, left: 20),
-        child: SizedBox( 
-          height: 45,
-          child: reusableElevatedButton(
-            text: 'Find me a destination!', 
-           onPressed: () async {
-              if (municipality == null || municipality!.isEmpty) {
-                promptFormat =
-                    "Give me one place in $country, in any part of province of $province that is fitted in this description: $preference. Use this format in giving my request: Name: {name of the place} Description: {2 sentences description of the place}.";
-              } else {
-                promptFormat =
-                    "Give me one place in $country, province of $province, municipality of $municipality that is fitted in this description: $preference. Use this format in giving my request: Name: {name of the place} Description: {2 sentences description of the place}.";
-              }
-
-              // Navigate to DisplayChoice with a callback to reload the history
-              await Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => DisplayChoice(
-                    promptFormat: promptFormat,
-                    onSelectIndex: (int index) {
-                      _loadHistory(); // Refresh history after returning
-                    },
-                  ),
-                ),
-              );
-            },
           ),
         ),
       ),
