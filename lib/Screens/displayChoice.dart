@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
+import 'package:intl/intl.dart';
 import 'package:travel_mate/Widgets/custom_AppBar.dart';
 import 'package:travel_mate/Widgets/custom_Button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -101,10 +102,13 @@ Future<void> saveRecommendedPlace(String placeName) async {
           .toList()
       : [];
 
-  // Add the new entry
+  // Format the current date and time to exclude milliseconds
+  String timestamp = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
+
+  // Add the new entry with formatted timestamp
   recommendedPlaces.add({
     'placeName': placeName,
-    'timestamp': DateTime.now().toString(),
+    'timestamp': timestamp, // Save the formatted timestamp
   });
 
   // Save updated recommended places back to SharedPreferences
