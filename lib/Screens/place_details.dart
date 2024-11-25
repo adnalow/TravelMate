@@ -4,7 +4,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:travel_mate/Screens/dialogbox_widget/add_review.dart';
 import 'package:travel_mate/Screens/explore.dart';
 import 'package:travel_mate/Widgets/custom_Button.dart';
-import 'package:travel_mate/controllers/tabtab_controller.dart';
+import 'package:travel_mate/controllers/tab_controller.dart';
 import 'package:travel_mate/main_screen.dart';
 import 'review_list.dart'; // Import the ReviewList widget
 import 'package:iconsax/iconsax.dart';

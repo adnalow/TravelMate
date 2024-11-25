@@ -7,6 +7,7 @@ import 'package:travel_mate/Screens/forgot_password.dart';
 import 'package:travel_mate/Screens/signup.dart';
 import 'package:travel_mate/Widgets/customTextField.dart';
 import 'package:travel_mate/Widgets/custom_Button.dart';
+import 'package:travel_mate/Widgets/onBack.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -84,31 +85,6 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  Future<bool> onBackPressed() async {
-    return await showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text("Exit App"),
-        content: const Text("Do you want to exit the app?"),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(false);
-            }, 
-            child: const Text("Cancel"),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(true);
-            }, 
-            child: const Text("Confirm"),
-          ),
-        ],
-      ),
-    ) ??
-    false; // Return false if dialog is dismissed
-  }
-
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -117,7 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
         if (didPop) {
           return;
         }
-        final result = await onBackPressed();
+        final result = await onBackPressed(context);
         if (result) {
           SystemNavigator.pop();
         }

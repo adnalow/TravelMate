@@ -7,7 +7,7 @@ import 'package:travel_mate/Screens/explore.dart';
 import 'package:travel_mate/Screens/home.dart';
 import 'package:travel_mate/Screens/itinerary.dart';
 import 'package:travel_mate/Screens/displayChoice.dart';
-import 'package:travel_mate/controllers/tabtab_controller.dart';
+import 'package:travel_mate/controllers/tab_controller.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
@@ -45,7 +45,7 @@ class MainScreen extends StatelessWidget {
           height: 60,
           onDestinationSelected: tabController.selectIndex, // Update the index when a tab is tapped
           destinations: const [
-            NavigationDestination(icon: Icon(Iconsax.calendar_edit), label: 'Plan'),
+            NavigationDestination(icon: Icon(Iconsax.calendar_edit), label: 'Build'),
             NavigationDestination(icon: Icon(Iconsax.people), label: 'Collab'),
             NavigationDestination(icon: Icon(Iconsax.home), label: 'Home'),
             NavigationDestination(icon: Icon(Iconsax.empty_wallet), label: 'Budget'),
