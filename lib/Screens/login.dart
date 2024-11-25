@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:travel_mate/Screens/forgot_password.dart';
 import 'package:travel_mate/Screens/signup.dart';
@@ -83,128 +84,164 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      
-      body: Stack(
-        children: [
-          Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/images/background.png'),
-                fit: BoxFit.cover,
-              ),
-            ),
+  Future<bool> onBackPressed() async {
+    return await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Exit App"),
+        content: const Text("Do you want to exit the app?"),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(false);
+            }, 
+            child: const Text("Cancel"),
           ),
-
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Container(
-                padding: const EdgeInsets.all(20.0),
-                decoration: BoxDecoration(
-                  color: Color(0xFFFFFFFF),
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Text(
-                      'Sign in now',
-                      style: TextStyle(
-                        fontSize: 26,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const Text(
-                      'Please sign in to continue our app',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Color(0xFF808080),
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    CustomTextField(
-                      controller: emailController,
-                      hintText: 'Enter email',
-                      width: double.infinity,
-                      labelText: 'Email',
-                    ),
-                    const SizedBox(height: 20),
-                    CustomTextField(
-                      controller: passwordController,
-                      labelText: 'Password',
-                      hintText: 'Enter password',
-                      width: double.infinity,
-                      obscureText: true, // Hide the password input
-                    ),
-                    const SizedBox(height: 25),
-                    SizedBox(
-                      width: 300,
-                      height: 45,
-                      child: loginElevatedButton(
-                        onPressed: isLoading ? null : signIn,
-                        child: isLoading
-                            ? const CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                              )
-                            : const Text(
-                                'Sign In',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    RichText(
-                      text: TextSpan(
-                        text: "Don't have an account? ",
-                        style: const TextStyle(
-                          fontSize: 15,
-                          color: Colors.black,
-                          fontFamily: 'Mulish',
-                        ),
-                        children: [
-                          TextSpan(
-                            text: 'Sign Up',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF48B89F),
-                            ),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                Get.to(SignupPage());
-                              }
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    GestureDetector(
-                      onTap: () {
-                        Get.to(ForgotPage());
-                      },
-                      child: const Text(
-                        'Forgot Password?',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                          color: Color(0xFF48B89F),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(true);
+            }, 
+            child: const Text("Confirm"),
           ),
         ],
+      ),
+    ) ??
+    false; // Return false if dialog is dismissed
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PopScope(
+      canPop: false, // Prevent default back button behavior
+      onPopInvoked: (didPop) async {
+        if (didPop) {
+          return;
+        }
+        final result = await onBackPressed();
+        if (result) {
+          SystemNavigator.pop();
+        }
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: Stack(
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/images/background.png'),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+      
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Container(
+                  padding: const EdgeInsets.all(20.0),
+                  decoration: BoxDecoration(
+                    color: Color(0xFFFFFFFF),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text(
+                        'Sign in now',
+                        style: TextStyle(
+                          fontSize: 26,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const Text(
+                        'Please sign in to continue our app',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Color(0xFF808080),
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      CustomTextField(
+                        controller: emailController,
+                        hintText: 'Enter email',
+                        width: double.infinity,
+                        labelText: 'Email',
+                      ),
+                      const SizedBox(height: 20),
+                      CustomTextField(
+                        controller: passwordController,
+                        labelText: 'Password',
+                        hintText: 'Enter password',
+                        width: double.infinity,
+                        obscureText: true, // Hide the password input
+                      ),
+                      const SizedBox(height: 25),
+                      SizedBox(
+                        width: 300,
+                        height: 45,
+                        child: loginElevatedButton(
+                          onPressed: isLoading ? null : signIn,
+                          child: isLoading
+                              ? const CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                )
+                              : const Text(
+                                  'Sign In',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      RichText(
+                        text: TextSpan(
+                          text: "Don't have an account? ",
+                          style: const TextStyle(
+                            fontSize: 15,
+                            color: Colors.black,
+                            fontFamily: 'Mulish',
+                          ),
+                          children: [
+                            TextSpan(
+                              text: 'Sign Up',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF48B89F),
+                              ),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  Get.to(SignupPage());
+                                }
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      GestureDetector(
+                        onTap: () {
+                          Get.to(ForgotPage());
+                        },
+                        child: const Text(
+                          'Forgot Password?',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                            color: Color(0xFF48B89F),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
