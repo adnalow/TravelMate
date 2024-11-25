@@ -1,7 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:csc_picker/csc_picker.dart';
+import 'package:travel_mate/Screens/displayChoice.dart';
 import 'package:travel_mate/Widgets/custom_AppBar.dart';
 import 'package:travel_mate/Widgets/custom_Button.dart';
+import 'dart:convert'; // For JSON decoding
+import 'package:shared_preferences/shared_preferences.dart';
+
+
+
+// Add a method to fetch history
+Future<List<Map<String, String>>> fetchHistory() async {
+  final prefs = await SharedPreferences.getInstance();
+  final String? historyJson = prefs.getString('history');
+  return historyJson != null
+      ? List<Map<String, String>>.from(json.decode(historyJson))
+      : [];
+}
 
 class ItineraryScreen extends StatefulWidget {
   const ItineraryScreen({super.key});
@@ -25,6 +39,38 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
   String? municipality = "";
   String? preference;
   String promptFormat = "";
+
+  List<Map<String, String>> history = [];
+
+  // Fetch history on initState
+  @override
+  void initState() {
+    super.initState();
+    _loadHistory();
+  }
+
+  void _loadHistory() async {
+  final prefs = await SharedPreferences.getInstance();
+  final String? recommendedPlaceJson = prefs.getString('recommended_place');
+
+  if (recommendedPlaceJson != null) {
+    final loadedHistory = json.decode(recommendedPlaceJson) as List;
+
+    setState(() {
+      history = loadedHistory
+          .map((item) => Map<String, String>.from(item as Map))
+          .toList()
+          .reversed
+          .toList(); // Reverse for the latest first
+    });
+  } else {
+    setState(() {
+      history = [];
+    });
+  }
+}
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -146,6 +192,52 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                 ),
               ),
               const SizedBox(height: 50),
+              Container(
+                padding: const EdgeInsets.all(10),
+                height: 235,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(5.0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 1,
+                      spreadRadius: 1,
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'History',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const Divider(color: Colors.grey), // Line separator
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: history.length,
+                        itemBuilder: (context, index) {
+                          final item = history[index];
+                          return ListTile(
+                            title: Text(
+                              item['placeName']!,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            subtitle: Text(item['timestamp']!),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
@@ -156,8 +248,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
           height: 45,
           child: reusableElevatedButton(
             text: 'Find me a destination!', 
-            onPressed: () async {
-              // Check if municipality is empty and set the prompt accordingly
+           onPressed: () async {
               if (municipality == null || municipality!.isEmpty) {
                 promptFormat =
                     "Give me one place in $country, in any part of province of $province that is fitted in this description: $preference. Use this format in giving my request: Name: {name of the place} Description: {2 sentences description of the place}.";
@@ -165,12 +256,19 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                 promptFormat =
                     "Give me one place in $country, province of $province, municipality of $municipality that is fitted in this description: $preference. Use this format in giving my request: Name: {name of the place} Description: {2 sentences description of the place}.";
               }
-              // Navigate to the DisplayChoice screen with the promptFormat
-              Navigator.of(context).pushNamed(
-                'DisplayChoice',
-                arguments: promptFormat,
+
+              // Navigate to DisplayChoice with a callback to reload the history
+              await Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => DisplayChoice(
+                    promptFormat: promptFormat,
+                    onSelectIndex: (int index) {
+                      _loadHistory(); // Refresh history after returning
+                    },
+                  ),
+                ),
               );
-            }
+            },
           ),
         ),
       ),
