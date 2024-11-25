@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:travel_mate/Widgets/customTextField.dart';
 import 'package:travel_mate/Widgets/custom_AppBar.dart';
 import 'package:intl/intl.dart';
@@ -324,7 +325,7 @@ class _ExpenseTrackerScreenState extends State<ExpenseTrackerScreen> {
               const SizedBox(height: 10),
                   
               // History container
-              Expanded(
+              Flexible(
                 child: Container(
                   height: 235,
                   decoration: BoxDecoration(
@@ -355,53 +356,62 @@ class _ExpenseTrackerScreenState extends State<ExpenseTrackerScreen> {
                             IconButton(
                               onPressed: _clearHistory,
                               icon: const Icon(
-                                Icons.delete,
+                                Iconsax.trash,
                               ),
                             ),
                           ],
                         ),
-                        const SizedBox(height: 10),
                         Expanded(
-                          child: ListView.builder(
-                            padding: const EdgeInsets.symmetric(horizontal: 5),
-                            itemCount: history.length,
-                            itemBuilder: (context, index) {
-                              int amount = history[index]["amount"];
-                              String formattedAmount = amount >= 0 ? "+$amount" : amount.toString();
-                              return Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                          child: history.isEmpty
+                              ? const Center(
+                                  child: Text(
+                                    "No history available",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                )
+                              : ListView.builder(
+                                padding: const EdgeInsets.symmetric(horizontal: 5),
+                                itemCount: history.length,
+                                itemBuilder: (context, index) {
+                                  int amount = history[index]["amount"];
+                                  String formattedAmount = amount >= 0 ? "+$amount" : amount.toString();
+                                  return Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(
-                                        history[index]["title"] ?? "No Title",
-                                        style: const TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w500,
-                                        ),
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            history[index]["title"] ?? "No Title",
+                                            style: const TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                          Text(
+                                            history[index]["timestamp"] ?? "",
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                       Text(
-                                        history[index]["timestamp"] ?? "",
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.grey,
+                                        formattedAmount,
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color: amount >= 0 ? Colors.green : Colors.red,
                                         ),
                                       ),
                                     ],
-                                  ),
-                                  Text(
-                                    formattedAmount,
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: amount >= 0 ? Colors.green : Colors.red,
-                                    ),
-                                  ),
-                                ],
-                              );
-                            },
-                          ),
+                                  );
+                                },
+                              ),
                         ),
                       ],
                     ),
