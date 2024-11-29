@@ -120,7 +120,7 @@ class _CollaborativeScreenState extends State<CollaborativeScreen> {
 
   Positioned planAdder() {
     return Positioned(
-      bottom: 20,
+      bottom: 10,
       right: 10,
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -153,90 +153,88 @@ class _CollaborativeScreenState extends State<CollaborativeScreen> {
     );
   }
 
-  Padding displayGroups() {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: Container(
-        height: 620,
-        child: groups.isEmpty
-            ? Center(
-                child: Text(
-                  'No groups available. Add a travel plan!',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.grey[600],
-                  ),
+  Container displayGroups() {
+    return Container(
+      height: 620,
+      child: groups.isEmpty
+          ? Center(
+              child: Text(
+                'No groups available. Add a travel plan!',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey[600],
                 ),
-              )
-            : ListView.separated(
-                itemCount: groups.length,
-                separatorBuilder: (context, index) =>
-                    const SizedBox(height: 10),
-                itemBuilder: (context, index) {
-                  return InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ContentPage(
-                            onLeaveGroup: () {
-                              _removeGroup(groups[index].id);
-                            },
-                            group: groups[index],
-                          ),
+              ),
+            )
+          : ListView.separated(
+              padding: const EdgeInsets.all(10), 
+              itemCount: groups.length,
+              separatorBuilder: (context, index) =>
+                  const SizedBox(height: 10),
+              itemBuilder: (context, index) {
+                return InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ContentPage(
+                          onLeaveGroup: () {
+                            _removeGroup(groups[index].id);
+                          },
+                          group: groups[index],
                         ),
-                      );
-                    },
-                    child: Container(
-                      height: 100,
-                      decoration: BoxDecoration(
-                        color: groups[index].boxColor,
-                        borderRadius: BorderRadius.circular(5),
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(15),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  groups[index].title,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.w500,
-                                  ),
+                    );
+                  },
+                  child: Container(
+                    height: 100,
+                    decoration: BoxDecoration(
+                      color: groups[index].boxColor,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(15),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                groups[index].title,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w500,
                                 ),
-                                GestureDetector(
-                                  onTap: () => _showColorPickerDialog(groups[
-                                      index]), // Add the function to change colors here
-                                  child: SvgPicture.asset(
-                                    'assets/icons/three-dots.svg',
-                                    height: 20,
-                                    width: 20,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Text(
-                              groups[index].label,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
                               ),
+                              GestureDetector(
+                                onTap: () => _showColorPickerDialog(groups[
+                                    index]), // Add the function to change colors here
+                                child: SvgPicture.asset(
+                                  'assets/icons/three-dots.svg',
+                                  height: 20,
+                                  width: 20,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Text(
+                            groups[index].label,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
-                  );
-                },
-              ),
-      ),
+                  ),
+                );
+              },
+            ),
     );
   }
 

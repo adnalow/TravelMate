@@ -193,7 +193,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                   }).toList(),
                 ),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 20),
 
               Padding(
                 padding: const EdgeInsets.only(left: 10, bottom: 20, right: 10),
