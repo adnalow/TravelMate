@@ -9,12 +9,14 @@ import 'dart:convert'; // For encoding and decoding JSON
 
 class DisplayChoice extends StatefulWidget {
   final String promptFormat; // Declare the promptFormat variable
+  final String selectedCategory;
   final Function(int) onSelectIndex; // Add this line
 
   // Updated constructor to require promptFormat
     const DisplayChoice({
       super.key,
       required this.promptFormat,
+      required this.selectedCategory,
       required this.onSelectIndex,
   }); // Updated constructor
 
@@ -37,7 +39,7 @@ class DisplayChoiceState extends State<DisplayChoice> {
     super.initState();
 
     // Initialize the model in initState
-    const apiKey = 'AIzaSyCG2fHWWQVSjMsIeJFrLZs3Ha0cc9tb3cY'; // Replace with your actual API key
+    const apiKey = ''; // Replace with your actual API key
     model = GenerativeModel(
       model: 'gemini-1.5-flash-latest',
       apiKey: apiKey,
@@ -206,7 +208,13 @@ Future<void> saveRecommendedPlace(String placeName) async {
                       setState(() {
                         loading = true; // Set loading to true for next destination request
                       });
-                      newPrompt = "Aside from $placeName, suggest a new destination that is within the same area or province. Use this format in giving my request: Name: {name of the place} Description: {2 sentences description of the place}.";
+                      newPrompt = """
+                      The destination "$placeName" is a ${widget.selectedCategory}. Suggest a new destination within the same area or province that belongs to the **same category** (${widget.selectedCategory}). 
+                      Follow this format in your response:
+                      Name: {name of the place}
+                      Description: {2 sentences description of the place}.
+                      Ensure the suggested destination is similar in type and appeal as $placeName, and provide only one recommendation.
+                      """;
                       sendRequest(newPrompt);
                     }
                   ),

@@ -206,25 +206,28 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                         child: reusableElevatedButton(
                           text: 'Find me a destination!', 
                         onPressed: () async {
-                            if (municipality == null || municipality!.isEmpty) {
-                              promptFormat =
+                            if (country != null && province != null) {
+                              if (municipality == null || municipality!.isEmpty) {
+                                promptFormat =
                                   "Give me one place in $country, in any part of province of $province that is fitted in this description: $preference. Use this format in giving my request: Name: {name of the place} Description: {2 sentences description of the place}.";
-                            } else {
-                              promptFormat =
-                                  "Give me one place in $country, province of $province, municipality of $municipality that is fitted in this description: $preference. Use this format in giving my request: Name: {name of the place} Description: {2 sentences description of the place}.";
-                            }
-                      
-                            // Navigate to DisplayChoice with a callback to reload the history
-                            await Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => DisplayChoice(
-                                  promptFormat: promptFormat,
-                                  onSelectIndex: (int index) {
-                                    _loadHistory(); // Refresh history after returning
-                                  },
+                              } else {
+                                promptFormat =
+                                    "Give me one place in $country, province of $province, municipality of $municipality that is fitted in this description: $preference. Use this format in giving my request: Name: {name of the place} Description: {2 sentences description of the place}.";
+                              }
+
+                                // Navigate to DisplayChoice with a callback to reload the history
+                              await Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => DisplayChoice(
+                                    selectedCategory: preference!,
+                                    promptFormat: promptFormat,
+                                    onSelectIndex: (int index) {
+                                      _loadHistory(); // Refresh history after returning
+                                    },
+                                  ),
                                 ),
-                              ),
-                            );
+                              );
+                            }
                           },
                         ),
                       ),
