@@ -219,6 +219,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                               await Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) => DisplayChoice(
+                                    selectedCategory: preference!,
                                     promptFormat: promptFormat,
                                     onSelectIndex: (int index) {
                                       _loadHistory(); // Refresh history after returning
