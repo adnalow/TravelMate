@@ -104,7 +104,7 @@ class _CollaborativeScreenState extends State<CollaborativeScreen> {
       appBar: const CustomAppBar(title: 'Collaborative Planner'),
       body: Stack(
         children: [
-          displayGroups(),
+          SizedBox.expand(child: displayGroups()),
           planAdder(),
         ],
       ),
