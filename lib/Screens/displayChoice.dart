@@ -39,7 +39,7 @@ class DisplayChoiceState extends State<DisplayChoice> {
     super.initState();
 
     // Initialize the model in initState
-    const apiKey = 'AIzaSyC2_o71jF0mT8C_KDJEEkm_xB0L2a5RCl0'; // Replace with your actual API key
+    const apiKey = ''; // Replace with your actual API key
     model = GenerativeModel(
       model: 'gemini-1.5-flash-latest',
       apiKey: apiKey,
