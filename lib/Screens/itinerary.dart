@@ -26,12 +26,11 @@ class ItineraryScreen extends StatefulWidget {
 
 class _ItineraryScreenState extends State<ItineraryScreen> {
   final List<String> options = [
-    "Hotel", "Restaurant", "Night Club", "Mall",
-    "Park", "Beach", "Sport Arena", "Church",
-    "Camping Site", "Street Food", "Music Venues",
-    "Landmark", "Museum", "Snorkeling", "Villas",
-    "Sunset Spots", "Sunrise Spots", "Resort",
-     "Honeymoon Suites", "Spa", "Fun Activities"
+    "Hotel", "Restaurant", "School", "Mall","Villas",
+    "Camping Site", "Beach", "Sport Arena", "Spa","Music Venues",
+    "Park", "Street Food", "Church",
+    "Landmark", "Museum", "Snorkeling", "Resort",
+    "Sunset Spots", "Sunrise Spots", "Fun Activities"
   ];
 
   final List<String> selectedOptions = []; // Store selected options here
@@ -203,7 +202,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                   }).toList(),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 40),
 
               Padding(
                 padding: const EdgeInsets.only(left: 10, bottom: 20, right: 10),
