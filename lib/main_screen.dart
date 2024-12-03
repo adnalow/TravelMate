@@ -85,6 +85,7 @@ class MainScreen extends StatelessWidget {
               // Use GetX to update the selected index
               Get.find<TabtabController>().selectIndex(index);
             },
+            selectedCategory: ' ',
           );
         }
         return MaterialPageRoute(builder: (_) => page);

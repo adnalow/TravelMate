@@ -39,7 +39,7 @@ class DisplayChoiceState extends State<DisplayChoice> {
     super.initState();
 
     // Initialize the model in initState
-    const apiKey = ''; // Replace with your actual API key
+    const apiKey = 'AIzaSyC2_o71jF0mT8C_KDJEEkm_xB0L2a5RCl0'; // Replace with your actual API key
     model = GenerativeModel(
       model: 'gemini-1.5-flash-latest',
       apiKey: apiKey,
@@ -188,8 +188,8 @@ Future<void> saveRecommendedPlace(String placeName) async {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                     ),
-                    onPressed: () {
-                      Navigator.pop(context); // Go back to the previous screen
+                     onPressed: () {
+                      Navigator.pop(context, true); // Return a value to notify ItineraryScreen
                     },
                     child: const Text(
                       'Back',
