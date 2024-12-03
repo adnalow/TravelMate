@@ -51,6 +51,16 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
     _loadHistory();
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    setState(() {
+      preference = null; // Clear the preference
+      selectedOptions.clear(); // Clear the selected options list
+    });
+  }
+
+
   void _loadHistory() async {
   final prefs = await SharedPreferences.getInstance();
   final String? recommendedPlaceJson = prefs.getString('recommended_place');
@@ -206,7 +216,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                         child: reusableElevatedButton(
                           text: 'Find me a destination!', 
                         onPressed: () async {
-                            if (country != null && province != null) {
+                            if (country != null && province != null && preference != null) {
                               if (municipality == null || municipality!.isEmpty) {
                                 promptFormat =
                                   "Give me one place in $country, in any part of province of $province that is fitted in this description: $preference. Use this format in giving my request: Name: {name of the place} Description: {2 sentences description of the place}.";
@@ -226,7 +236,15 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                                     },
                                   ),
                                 ),
-                              );
+                              ).then((value) {
+                                if (value == true) {
+                                  setState(() {
+                                    // Reset the preference and selected options when returning
+                                    preference = null;
+                                    selectedOptions.clear(); // Clear selected options
+                                  });
+                                }
+                              });
                             }
                           },
                         ),
