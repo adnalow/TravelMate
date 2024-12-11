@@ -84,7 +84,29 @@
 
 ## **Screenshots**
 
+### Itinerary Builder
+<div align="center">
+  <img src="assets/images/IB1.png" alt="Itinerary Builder" width="300">
+  <img src="assets/images/IB2.png" alt="Itinerary Builder" width="300">
+</div>
 
+### Collaborative Planning
+<div align="center">
+  <img src="assets/images/CP1.png" alt="Collaborative Planning" width="300">
+  <img src="assets/images/CP2.png" alt="Collaborative Planning" width="300">
+  <img src="assets/images/CP3.png" alt="Collaborative Planning" width="300">
+</div>
+
+### Expense Tracker
+<div align="center">
+  <img src="assets/images/E1.png" alt="Expense Tracker" width="300">
+</div>
+
+### Discover
+<div align="center">
+  <img src="assets/images/D1.png" alt="Discover" width="300">
+  <img src="assets/images/D2.png" alt="Discover" width="300">
+</div>
 
 
 ---
