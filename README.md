@@ -85,19 +85,32 @@
 ## **Screenshots**
 
 ### Itinerary Builder
-📸 ![Itinerary Builder](assets/images/itinerary_builder.png)
+<div align="center">
+  <img src="assets/images/IB1.png" alt="Itinerary Builder" width="300">
+  <img src="assets/images/IB2.png" alt="Itinerary Builder" width="300">
+</div>
 
 ### Collaborative Planning
-📸 ![Collaborative Planning](assets/images/collaborative_planning.png)
+<div align="center">
+  <img src="assets/images/CP1.png" alt="Collaborative Planning" width="300">
+  <img src="assets/images/CP2.png" alt="Collaborative Planning" width="300">
+  <img src="assets/images/CP3.png" alt="Collaborative Planning" width="300">
+</div>
 
 ### Expense Tracker
-📸 ![Collaborative Planning](assets/images/collaborative_planning.png)
+<div align="center">
+  <img src="assets/images/E1.png" alt="Expense Tracker" width="300">
+</div>
 
 ### Discover
-📸 ![Collaborative Planning](assets/images/collaborative_planning.png)
+<div align="center">
+  <img src="assets/images/D1.png" alt="Discover" width="300">
+  <img src="assets/images/D2.png" alt="Discover" width="300">
+</div>
+
+
+
 ---
-
-
 <div align="center">
   Made with ❤️ by Team TravelMate
 </div>
